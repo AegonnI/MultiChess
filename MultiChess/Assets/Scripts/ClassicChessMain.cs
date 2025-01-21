@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,16 +11,22 @@ public class ClassicChessMain : MonoBehaviour
 
     public GameObject bgCell;
     public GameObject emptyCell;
-    public King whiteKing;
 
+    public King whiteKing;
+    public King blackKing;
+    public Queen blackQueen;
+
+    private List<GameObject> emptyCells;
+
+    public static GameObject ChoosenFigure;
     public static bool figureClicked;
 
 
     void Start()
     {
-        //FigureClick += FigureClickHandle;
-
         figureClicked = false;
+        emptyCells = new List<GameObject>();
+        ChoosenFigure = null;
 
         for (int i = 0; i < _fieldSize; i++)
         {
@@ -31,20 +39,27 @@ public class ClassicChessMain : MonoBehaviour
             }
         }
 
-        whiteKing.transform.position = new Vector3(4 - 3.5f, -7 + 3.5f, -1);
+        //whiteKing.transform.position = new Vector3(4 - 3.5f, -7 + 3.5f, -1);
 
         if (whiteKing != null)
             whiteKing.FigureClick += OnKingClicked;
+        else
+            Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
+
+        if (blackKing != null)
+            blackKing.FigureClick += OnKingClicked;
+        else
+            Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
+
+        if (blackQueen != null)
+            blackQueen.FigureClick += OnQueenClicked;
         else
             Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
     }
 
     void Update()
     {
-        if (figureClicked) 
-        { 
-        
-        }
+
     }
 
     private void OnDestroy()
@@ -60,25 +75,107 @@ public class ClassicChessMain : MonoBehaviour
         if (!figureClicked)
         {
             figureClicked = true;
+            ChoosenFigure = clickedKing.GameObject();
 
             Vector2 pos = clickedKing.transform.position;
 
-            Instantiate(emptyCell, new Vector2(pos.x + 1, pos.y + 1), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x + 1, pos.y - 1), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x - 1, pos.y + 1), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x - 1, pos.y - 1), Quaternion.identity);
+            float x = pos.x + 1;
+            float y = pos.y + 1;
+            float dx = 0;
+            float dy = -1;
 
-            Instantiate(emptyCell, new Vector2(pos.x, pos.y + 1), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x, pos.y - 1), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x + 1, pos.y), Quaternion.identity);
-            Instantiate(emptyCell, new Vector2(pos.x - 1, pos.y), Quaternion.identity);
+            for (int i = 0; i < 8; i++)
+            {
+                if (Math.Abs(x) <= 3.5 && Math.Abs(y) <= 3.5)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+
+                if (x + dx > pos.x + 1 || x + dx < pos.x - 1 || y + dy > pos.y + 1 || y + dy < pos.y - 1)
+                {
+                    (dx, dy) = (dy, -dx);
+                }
+                x += dx;
+                y += dy;
+            }
         }
-
-
+        else
+        {
+            DestroyEmptyCells();
+        }
     }
 
-    void FigureClickHandle()
+    private void OnQueenClicked(Queen clickedQueen)
     {
-        Debug.Log("Shit");
+        Debug.Log($"Клик на ферзя: {clickedQueen.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedQueen.GameObject();
+
+            Vector2 pos = clickedQueen.transform.position;
+
+            for (float i = -3.5f; i <= 3.5f; i += 1)
+            {
+                if (i != pos.x)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+                if (i != pos.y)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+
+            }
+
+            for (float x = -3.5f; x <= 3.5f; x += 1)
+            {
+                float y = x - pos.x + pos.y;
+                float uy = -x + pos.x + pos.y;
+
+                if (Math.Abs(x) <= 3.5 && x != pos.x)
+                {
+                    if (y != pos.y && Math.Abs(y) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
+
+                    if (uy != pos.y && Math.Abs(uy) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, uy, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
+                }
+            }
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    private void DestroyEmptyCells()
+    {
+        figureClicked = false;
+        ChoosenFigure = null;
+
+        foreach (var cell in emptyCells)
+        {
+            Destroy(cell.gameObject);
+        }
+        emptyCells.Clear();
+    }
+
+    private void OnEmptyCellClicked(EmptyCell clickedCell, GameObject clickedFigure)
+    {
+        Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
+
+        clickedFigure.transform.position = clickedCell.transform.position;
+        DestroyEmptyCells();
     }
 }
