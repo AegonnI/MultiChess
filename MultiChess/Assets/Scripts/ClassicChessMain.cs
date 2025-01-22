@@ -82,20 +82,35 @@ public class ClassicChessMain : MonoBehaviour
 
         //whiteKing.transform.position = new Vector3(4 - 3.5f, -7 + 3.5f, -1);
 
-        if (whiteKing != null)
-            whiteKing.FigureClick += OnKingClicked;
-        else
-            Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
+        //White
+        AppointFigure(whiteKing, () => whiteKing.FigureClick += OnKingClicked);
+        AppointFigure(whiteQueen, () => whiteQueen.FigureClick += OnQueenClicked);
 
-        if (blackKing != null)
-            blackKing.FigureClick += OnKingClicked;
-        else
-            Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
+        AppointFigure(whiteRook1, () => whiteRook1.FigureClick += OnRookClicked);
+        AppointFigure(whiteRook2, () => whiteRook2.FigureClick += OnRookClicked);
 
-        if (blackQueen != null)
-            blackQueen.FigureClick += OnQueenClicked;
+        AppointFigure(whiteKnight1, () => whiteKnight1.FigureClick += OnKnightClicked);
+        AppointFigure(whiteKnight2, () => whiteKnight2.FigureClick += OnKnightClicked);
+
+        //AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnBishopClicked);
+
+        //black
+        AppointFigure(blackKing, () => blackKing.FigureClick += OnKingClicked);
+        AppointFigure(blackQueen, () => blackQueen.FigureClick += OnQueenClicked);
+
+        AppointFigure(blackRook1, () => blackRook1.FigureClick += OnRookClicked);
+        AppointFigure(blackRook2, () => blackRook2.FigureClick += OnRookClicked);
+
+        AppointFigure(blackKnight1, () => blackKnight1.FigureClick += OnKnightClicked);
+        AppointFigure(blackKnight2, () => blackKnight2.FigureClick += OnKnightClicked);
+    }
+
+    private void AppointFigure<T>(T figure, Action action)
+    {
+        if (figure != null)
+            action();
         else
-            Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
+            Debug.LogError("Необходимо назначить фигуру в ClassicChessMain!");
     }
 
 
@@ -227,7 +242,7 @@ public class ClassicChessMain : MonoBehaviour
         }
     }
 
-    private void OnKnigthClicked(Knight clickedFigure)
+    private void OnKnightClicked(Knight clickedFigure)
     {
         Debug.Log($"Клик на коня: {clickedFigure.gameObject.name}");
 
