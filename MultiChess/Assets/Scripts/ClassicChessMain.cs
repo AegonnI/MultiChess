@@ -12,9 +12,50 @@ public class ClassicChessMain : MonoBehaviour
     public GameObject bgCell;
     public GameObject emptyCell;
 
+    //White
     public King whiteKing;
+    public Queen whiteQueen;
+
+    public Rook whiteRook1;
+    public Rook whiteRook2;
+
+    public Knight whiteKnight1;
+    public Knight whiteKnight2;
+
+    public Bishop whiteBishop1;
+    public Bishop whiteBishop2;
+
+    public Pawn whitePawn1;
+    public Pawn whitePawn2;
+    public Pawn whitePawn3;
+    public Pawn whitePawn4;
+    public Pawn whitePawn5;
+    public Pawn whitePawn6;
+    public Pawn whitePawn7;
+    public Pawn whitePawn8;
+
+    //Black
     public King blackKing;
     public Queen blackQueen;
+
+    public Rook blackRook1;
+    public Rook blackRook2;
+
+    public Knight blackKnight1;
+    public Knight blackKnight2;
+
+    public Bishop blackBishop1;
+    public Bishop blackBishop2;
+
+    public Pawn blackPawn1;
+    public Pawn blackPawn2;
+    public Pawn blackPawn3;
+    public Pawn blackPawn4;
+    public Pawn blackPawn5;
+    public Pawn blackPawn6;
+    public Pawn blackPawn7;
+    public Pawn blackPawn8;
+    //
 
     private List<GameObject> emptyCells;
 
@@ -57,10 +98,6 @@ public class ClassicChessMain : MonoBehaviour
             Debug.LogError("Необходимо назначить короля в ClassicChessMain!");
     }
 
-    void Update()
-    {
-
-    }
 
     private void OnDestroy()
     {
@@ -150,6 +187,71 @@ public class ClassicChessMain : MonoBehaviour
                         emptyCells.Add(Instantiate(emptyCell, new Vector3(x, uy, -1), Quaternion.identity));
                         emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
                     }
+                }
+            }
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    private void OnRookClicked(Rook clickedFigure)
+    {
+        Debug.Log($"Клик на ладью: {clickedFigure.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedFigure.GameObject();
+
+            Vector2 pos = clickedFigure.transform.position;
+
+            for (float i = -3.5f; i <= 3.5f; i += 1)
+            {
+                if (i != pos.x)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+                if (i != pos.y)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+            }
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    private void OnKnigthClicked(Knight clickedFigure)
+    {
+        Debug.Log($"Клик на коня: {clickedFigure.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedFigure.GameObject();
+
+            Vector2 pos = clickedFigure.transform.position;
+
+            float x = pos.x;
+            float y = pos.y;
+
+            for (float i = x - 2; i <= x + 2; i += 1)
+            {
+                if (Math.Abs(i) <= 3.5 && i != pos.x)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                }
+                if (Math.Abs(i) <= 3.5 && i != pos.y)
+                {
+                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
+                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
                 }
             }
         }

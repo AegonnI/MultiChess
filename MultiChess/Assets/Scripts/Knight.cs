@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class King : Cell
+public class Knight : Cell
 {
-    public event Action<King> FigureClick;
+    public event Action<Knight> FigureClick;
 
     private void OnMouseDown()
     {
