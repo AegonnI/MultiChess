@@ -92,7 +92,8 @@ public class ClassicChessMain : MonoBehaviour
         AppointFigure(whiteKnight1, () => whiteKnight1.FigureClick += OnKnightClicked);
         AppointFigure(whiteKnight2, () => whiteKnight2.FigureClick += OnKnightClicked);
 
-        //AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnBishopClicked);
+        AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnBishopClicked);
+        AppointFigure(whiteBishop2, () => whiteBishop2.FigureClick += OnBishopClicked);
 
         //black
         AppointFigure(blackKing, () => blackKing.FigureClick += OnKingClicked);
@@ -103,6 +104,9 @@ public class ClassicChessMain : MonoBehaviour
 
         AppointFigure(blackKnight1, () => blackKnight1.FigureClick += OnKnightClicked);
         AppointFigure(blackKnight2, () => blackKnight2.FigureClick += OnKnightClicked);
+
+        AppointFigure(blackBishop1, () => blackBishop1.FigureClick += OnBishopClicked);
+        AppointFigure(blackBishop2, () => blackBishop2.FigureClick += OnBishopClicked);
     }
 
     private void AppointFigure<T>(T figure, Action action)
@@ -251,22 +255,61 @@ public class ClassicChessMain : MonoBehaviour
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
 
+            Vector2 pos = clickedFigure.transform.position;          
+
+            for (int i = -1 ; i <= 1; i += 2)
+            {
+                for (int j = -1; j <= 1; j += 2)
+                {
+                    if (Math.Abs(i * 1 + pos.x) <= 3.5 && Math.Abs(j * 2 + pos.y) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(i * 1 + pos.x, j * 2 + pos.y, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
+
+                    if (Math.Abs(i * 2 + pos.x) <= 3.5 && Math.Abs(j * 1 + pos.y) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(i * 2 + pos.x, j * 1 + pos.y, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
+                }
+            }
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    private void OnBishopClicked(Bishop clickedFigure)
+    {
+        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedFigure.GameObject();
+
             Vector2 pos = clickedFigure.transform.position;
 
-            float x = pos.x;
-            float y = pos.y;
-
-            for (float i = x - 2; i <= x + 2; i += 1)
+            for (float x = -3.5f; x <= 3.5f; x += 1)
             {
-                if (Math.Abs(i) <= 3.5 && i != pos.x)
+                float y = x - pos.x + pos.y;
+                float uy = -x + pos.x + pos.y;
+
+                if (Math.Abs(x) <= 3.5 && x != pos.x)
                 {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
-                }
-                if (Math.Abs(i) <= 3.5 && i != pos.y)
-                {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    if (y != pos.y && Math.Abs(y) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
+
+                    if (uy != pos.y && Math.Abs(uy) <= 3.5)
+                    {
+                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, uy, -1), Quaternion.identity));
+                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    }
                 }
             }
         }
