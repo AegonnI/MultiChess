@@ -198,6 +198,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 366118889127101069, guid: 176f0e3aa72929649b9db38ae2f75e7a, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 737032193334503460, guid: 176f0e3aa72929649b9db38ae2f75e7a, type: 3}
       propertyPath: m_Name
       value: BlackRook1
@@ -305,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 1264901880626243001, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
@@ -442,6 +450,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
       value: BlackPawn7
@@ -577,6 +589,10 @@ PrefabInstance:
     - target: {fileID: 1264901880626243001, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
@@ -853,6 +869,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
       value: BlackPawn2
@@ -920,6 +940,10 @@ PrefabInstance:
     - target: {fileID: 1264901880626243001, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
@@ -1021,6 +1045,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2122156943518962986, guid: a58a4614c1acc5b4694fb4f48c9debca, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4390969245436751024, guid: a58a4614c1acc5b4694fb4f48c9debca, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
@@ -1401,6 +1429,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
       value: BlackPawn6
@@ -1468,6 +1500,10 @@ PrefabInstance:
     - target: {fileID: 5491711714370906396, guid: 46df89b15187b67449d7bdaea7a487b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210397712288245506, guid: 46df89b15187b67449d7bdaea7a487b2, type: 3}
+      propertyPath: side
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9172086885716087312, guid: 46df89b15187b67449d7bdaea7a487b2, type: 3}
       propertyPath: m_Name
@@ -1622,6 +1658,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2122156943518962986, guid: a58a4614c1acc5b4694fb4f48c9debca, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4390969245436751024, guid: a58a4614c1acc5b4694fb4f48c9debca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.5
@@ -1690,6 +1730,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 366118889127101069, guid: 176f0e3aa72929649b9db38ae2f75e7a, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 737032193334503460, guid: 176f0e3aa72929649b9db38ae2f75e7a, type: 3}
       propertyPath: m_Name
       value: BlackRook2
@@ -1866,6 +1910,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name
       value: BlackPawn1
@@ -1896,7 +1944,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 615586037022763481, guid: bb9b9f733defe674d82481b656b4a86d, type: 3}
       propertyPath: side
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 615586037022763481, guid: bb9b9f733defe674d82481b656b4a86d, type: 3}
       propertyPath: m_Enabled
@@ -2021,6 +2069,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6210397712288245506, guid: 46df89b15187b67449d7bdaea7a487b2, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9172086885716087312, guid: 46df89b15187b67449d7bdaea7a487b2, type: 3}
       propertyPath: m_Name
       value: BlackBishop1
@@ -2088,6 +2140,10 @@ PrefabInstance:
     - target: {fileID: 1264901880626243001, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1471639104339401165, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
+      propertyPath: side
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8278866218407238542, guid: f4d1acb2effd5f646a2e1362ef6919b9, type: 3}
       propertyPath: m_Name

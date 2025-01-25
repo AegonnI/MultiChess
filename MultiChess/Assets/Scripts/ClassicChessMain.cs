@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class ClassicChessMain : MonoBehaviour
 {
@@ -95,6 +96,15 @@ public class ClassicChessMain : MonoBehaviour
         AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnBishopClicked);
         AppointFigure(whiteBishop2, () => whiteBishop2.FigureClick += OnBishopClicked);
 
+        AppointFigure(whitePawn1, () => whitePawn1.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn2, () => whitePawn2.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn3, () => whitePawn3.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn4, () => whitePawn4.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn5, () => whitePawn5.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn6, () => whitePawn6.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn7, () => whitePawn7.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn8, () => whitePawn8.FigureClick += OnPawnClicked);
+
         //black
         AppointFigure(blackKing, () => blackKing.FigureClick += OnKingClicked);
         AppointFigure(blackQueen, () => blackQueen.FigureClick += OnQueenClicked);
@@ -107,6 +117,16 @@ public class ClassicChessMain : MonoBehaviour
 
         AppointFigure(blackBishop1, () => blackBishop1.FigureClick += OnBishopClicked);
         AppointFigure(blackBishop2, () => blackBishop2.FigureClick += OnBishopClicked);
+
+        AppointFigure(blackPawn1, () => blackPawn1.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn2, () => blackPawn2.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn3, () => blackPawn3.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn4, () => blackPawn4.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn5, () => blackPawn5.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn6, () => blackPawn6.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn7, () => blackPawn7.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn8, () => blackPawn8.FigureClick += OnPawnClicked);
+
     }
 
     private void AppointFigure<T>(T figure, Action action)
@@ -124,41 +144,60 @@ public class ClassicChessMain : MonoBehaviour
             whiteKing.GetComponent<King>().FigureClick -= OnKingClicked;
     }
 
-    private void OnKingClicked(King clickedKing)
+    private void OnFigureClick(Cell clickedFigure, Action<Vector2> action)
     {
-        Debug.Log($"Клик на короля: {clickedKing.gameObject.name}");
+        Debug.Log($"Клик на короля: {clickedFigure.gameObject.name}");
 
         if (!figureClicked)
         {
             figureClicked = true;
-            ChoosenFigure = clickedKing.GameObject();
+            ChoosenFigure = clickedFigure.GameObject();
 
-            Vector2 pos = clickedKing.transform.position;
-
-            float x = pos.x + 1;
-            float y = pos.y + 1;
-            float dx = 0;
-            float dy = -1;
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (Math.Abs(x) <= 3.5 && Math.Abs(y) <= 3.5)
-                {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
-                }
-
-                if (x + dx > pos.x + 1 || x + dx < pos.x - 1 || y + dy > pos.y + 1 || y + dy < pos.y - 1)
-                {
-                    (dx, dy) = (dy, -dx);
-                }
-                x += dx;
-                y += dy;
-            }
+            action(clickedFigure.transform.position);
         }
         else
         {
             DestroyEmptyCells();
+        }
+    }
+
+    private void OnKingClicked(King clickedFigure)
+    {
+        Debug.Log($"Клик на короля: {clickedFigure.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedFigure.GameObject();
+
+            KingPossibleTurns(clickedFigure.transform.position);
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    private void KingPossibleTurns(Vector2 pos)
+    {
+        float x = pos.x + 1;
+        float y = pos.y + 1;
+        float dx = 0;
+        float dy = -1;
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (Math.Abs(x) <= 3.5 && Math.Abs(y) <= 3.5)
+            {
+                AddEmptyCell(x, y);
+            }
+
+            if (x + dx > pos.x + 1 || x + dx < pos.x - 1 || y + dy > pos.y + 1 || y + dy < pos.y - 1)
+            {
+                (dx, dy) = (dy, -dx);
+            }
+            x += dx;
+            y += dy;
         }
     }
 
@@ -177,13 +216,11 @@ public class ClassicChessMain : MonoBehaviour
             {
                 if (i != pos.x)
                 {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    AddEmptyCell(i, pos.y);
                 }
                 if (i != pos.y)
                 {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    AddEmptyCell(pos.x, i);
                 }
 
             }
@@ -197,14 +234,12 @@ public class ClassicChessMain : MonoBehaviour
                 {
                     if (y != pos.y && Math.Abs(y) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(x, y);
                     }
 
                     if (uy != pos.y && Math.Abs(uy) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, uy, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(x, uy);
                     }
                 }
             }
@@ -230,13 +265,11 @@ public class ClassicChessMain : MonoBehaviour
             {
                 if (i != pos.x)
                 {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(i, pos.y, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    AddEmptyCell(i, pos.y);
                 }
                 if (i != pos.y)
                 {
-                    emptyCells.Add(Instantiate(emptyCell, new Vector3(pos.x, i, -1), Quaternion.identity));
-                    emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                    AddEmptyCell(pos.x, i);
                 }
             }
         }
@@ -263,14 +296,12 @@ public class ClassicChessMain : MonoBehaviour
                 {
                     if (Math.Abs(i * 1 + pos.x) <= 3.5 && Math.Abs(j * 2 + pos.y) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(i * 1 + pos.x, j * 2 + pos.y, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(i * 1 + pos.x, j * 2 + pos.y);
                     }
 
                     if (Math.Abs(i * 2 + pos.x) <= 3.5 && Math.Abs(j * 1 + pos.y) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(i * 2 + pos.x, j * 1 + pos.y, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(i * 2 + pos.x, j * 1 + pos.y);
                     }
                 }
             }
@@ -301,14 +332,12 @@ public class ClassicChessMain : MonoBehaviour
                 {
                     if (y != pos.y && Math.Abs(y) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(x, y);
                     }
 
                     if (uy != pos.y && Math.Abs(uy) <= 3.5)
                     {
-                        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, uy, -1), Quaternion.identity));
-                        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
+                        AddEmptyCell(x, uy);
                     }
                 }
             }
@@ -317,6 +346,41 @@ public class ClassicChessMain : MonoBehaviour
         {
             DestroyEmptyCells();
         }
+    }
+
+    private void OnPawnClicked(Pawn clickedFigure)
+    {
+        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
+
+        if (!figureClicked)
+        {
+            figureClicked = true;
+            ChoosenFigure = clickedFigure.GameObject();
+
+            Vector2 pos = clickedFigure.transform.position;
+            int factor = clickedFigure.side ? -1 : 1;
+
+            if (Math.Abs(pos.y + factor) <= 3.5)
+            {
+                AddEmptyCell(pos.x, pos.y + factor);
+
+                if (clickedFigure.isFirstTurn)
+                {
+                    AddEmptyCell(pos.x, pos.y + factor * 2);
+                    clickedFigure.isFirstTurn = false;
+                }
+            }
+        }
+        else
+        {
+            DestroyEmptyCells();
+        }
+    }
+
+    public void AddEmptyCell(float x, float y)
+    {
+        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
+        emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
     }
 
     private void DestroyEmptyCells()
