@@ -59,9 +59,12 @@ public class ClassicChessMain : MonoBehaviour
     //
 
     private List<GameObject> emptyCells;
+    private bool isWhiteMove;
+    private bool[,] isCellOccupied;
 
     public static GameObject ChoosenFigure;
     public static bool figureClicked;
+
 
 
     void Start()
@@ -69,12 +72,13 @@ public class ClassicChessMain : MonoBehaviour
         figureClicked = false;
         emptyCells = new List<GameObject>();
         ChoosenFigure = null;
+        isWhiteMove = true;
 
         for (int i = 0; i < _fieldSize; i++)
         {
             for (int j = 0; j < _fieldSize; j++)
             {                
-                bgCell.GetComponent<SpriteRenderer>().color = (i + j + 2) % 2 == 0 ? Color.white : Color.black;
+                bgCell.GetComponent<SpriteRenderer>().color = (i + j + 2) % 2 == 0 ? new Color(0.9f, 0.9f, 0.8f, 1f) : new Color(0.27f, 0.3f, 0.37f, 1f);
                 bgCell.name = "bgCell [" + i + ';' + j + "]";
 
                 Instantiate(bgCell, new Vector2(j - 3.5f, - i + 3.5f), Quaternion.identity);
@@ -161,11 +165,25 @@ public class ClassicChessMain : MonoBehaviour
         }
     }
 
+    private void KillFigure(GameObject clickedFigure)
+    {
+        Vector2 figurePos = clickedFigure.transform.position;
+        foreach (GameObject emptyCell in emptyCells)
+        {
+            Vector2 emptyCellPos = emptyCell.transform.position;
+            if (emptyCellPos == figurePos)
+            {
+                Destroy(clickedFigure.gameObject);
+                ChoosenFigure.transform.position = emptyCell.transform.position;
+            }
+        }
+    }
+
     private void OnKingClicked(King clickedFigure)
     {
         Debug.Log($"Клик на короля: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
@@ -173,7 +191,12 @@ public class ClassicChessMain : MonoBehaviour
             KingPossibleTurns(clickedFigure.transform.position);
         }
         else
-        {
+        {            
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -201,16 +224,16 @@ public class ClassicChessMain : MonoBehaviour
         }
     }
 
-    private void OnQueenClicked(Queen clickedQueen)
+    private void OnQueenClicked(Queen clickedFigure)
     {
-        Debug.Log($"Клик на ферзя: {clickedQueen.gameObject.name}");
+        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
-            ChoosenFigure = clickedQueen.GameObject();
+            ChoosenFigure = clickedFigure.GameObject();
 
-            Vector2 pos = clickedQueen.transform.position;
+            Vector2 pos = clickedFigure.transform.position;
 
             for (float i = -3.5f; i <= 3.5f; i += 1)
             {
@@ -246,6 +269,11 @@ public class ClassicChessMain : MonoBehaviour
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -254,7 +282,7 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на ладью: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
@@ -275,6 +303,11 @@ public class ClassicChessMain : MonoBehaviour
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -283,7 +316,7 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на коня: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
@@ -308,6 +341,11 @@ public class ClassicChessMain : MonoBehaviour
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -316,7 +354,7 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
@@ -344,6 +382,11 @@ public class ClassicChessMain : MonoBehaviour
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -352,13 +395,13 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
 
             Vector2 pos = clickedFigure.transform.position;
-            int factor = clickedFigure.side ? -1 : 1;
+            int factor = clickedFigure.isWhite ? 1 : -1;
 
             if (Math.Abs(pos.y + factor) <= 3.5)
             {
@@ -367,19 +410,23 @@ public class ClassicChessMain : MonoBehaviour
                 if (clickedFigure.isFirstTurn)
                 {
                     AddEmptyCell(pos.x, pos.y + factor * 2);
-                    clickedFigure.isFirstTurn = false;
                 }
             }
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
 
     public void AddEmptyCell(float x, float y)
     {
-        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -1), Quaternion.identity));
+        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -0.9f), Quaternion.identity));
         emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
     }
 
@@ -399,7 +446,16 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
 
-        clickedFigure.transform.position = clickedCell.transform.position;
+        //clickedFigure.transform.position = clickedCell.transform.position;
+        clickedFigure.transform.position = new Vector3(clickedCell.transform.position.x, clickedCell.transform.position.y, -1);
+        isWhiteMove = !isWhiteMove;
+
+        if (clickedFigure.GetComponent<Pawn>())
+        {
+
+            clickedFigure.GetComponent<Pawn>().isFirstTurn = false;
+        }
+
         DestroyEmptyCells();
     }
 }

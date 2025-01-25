@@ -7,16 +7,6 @@ public class EmptyCell : Cell
 {
     public event Action<EmptyCell, GameObject> emptyCellClick;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void OnMouseDown()
     {
         if (emptyCellClick != null && ClassicChessMain.ChoosenFigure != null)

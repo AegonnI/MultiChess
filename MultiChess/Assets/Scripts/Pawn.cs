@@ -6,7 +6,7 @@ using UnityEngine;
 public class Pawn : Cell
 {
     public event Action<Pawn> FigureClick;
-    public bool isFirstTurn;
+    public bool isFirstTurn { set; get; }
 
     private void Start()
     {
