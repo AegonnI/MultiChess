@@ -60,7 +60,8 @@ public class ClassicChessMain : MonoBehaviour
 
     private List<GameObject> emptyCells;
     private bool isWhiteMove;
-    private bool[,] isCellOccupied;
+    private GameObject[,] cellOccupied;
+    private List<GameObject> figures;
 
     public static GameObject ChoosenFigure;
     public static bool figureClicked;
@@ -73,6 +74,54 @@ public class ClassicChessMain : MonoBehaviour
         emptyCells = new List<GameObject>();
         ChoosenFigure = null;
         isWhiteMove = true;
+
+        cellOccupied = new GameObject[8,8];
+        for (int i = 0; i < cellOccupied.GetLength(0); i++)
+        {
+            for (int j = 0; j < cellOccupied.GetLength(0); j++)
+            {
+                cellOccupied[i,j] = null;
+            }
+        }
+
+        figures = new List<GameObject>();
+        figures.Add(whiteKing.GameObject());
+        figures.Add(whiteQueen.GameObject());
+        figures.Add(whiteRook1.GameObject());
+        figures.Add(whiteRook2.GameObject());
+        figures.Add(whiteKnight1.GameObject());
+        figures.Add(whiteKnight2.GameObject());
+        figures.Add(whiteBishop1.GameObject());
+        figures.Add(whiteBishop2.GameObject());
+        figures.Add(whitePawn1.GameObject());
+        figures.Add(whitePawn2.GameObject());
+        figures.Add(whitePawn3.GameObject());
+        figures.Add(whitePawn4.GameObject());
+        figures.Add(whitePawn5.GameObject());
+        figures.Add(whitePawn6.GameObject());
+        figures.Add(whitePawn7.GameObject());
+        figures.Add(whitePawn8.GameObject());
+        figures.Add(blackKing.GameObject());
+        figures.Add(blackQueen.GameObject());
+        figures.Add(blackRook1.GameObject());
+        figures.Add(blackRook2.GameObject());
+        figures.Add(blackKnight1.GameObject());
+        figures.Add(blackKnight2.GameObject());
+        figures.Add(blackBishop1.GameObject());
+        figures.Add(blackBishop2.GameObject());
+        figures.Add(blackPawn1.GameObject());
+        figures.Add(blackPawn2.GameObject());
+        figures.Add(blackPawn3.GameObject());
+        figures.Add(blackPawn4.GameObject());
+        figures.Add(blackPawn5.GameObject());
+        figures.Add(blackPawn6.GameObject());
+        figures.Add(blackPawn7.GameObject());
+        figures.Add(blackPawn8.GameObject());
+
+        foreach (GameObject figure in figures)
+        {
+            FillcellOccupied(figure);
+        }
 
         for (int i = 0; i < _fieldSize; i++)
         {
@@ -131,6 +180,21 @@ public class ClassicChessMain : MonoBehaviour
         AppointFigure(blackPawn7, () => blackPawn7.FigureClick += OnPawnClicked);
         AppointFigure(blackPawn8, () => blackPawn8.FigureClick += OnPawnClicked);
 
+    }
+
+    private void FillcellOccupied(GameObject gameObject)
+    {
+        cellOccupied[(int)(gameObject.transform.position.x + 3.5f), (int)(gameObject.transform.position.y + 3.5f)] = gameObject;
+    }
+
+    private bool isCellOccupied(float x, float y)
+    {
+        return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)] != null;
+    }
+
+    private GameObject GetAnOccupier(float x, float y)
+    {
+        return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)];
     }
 
     private void AppointFigure<T>(T figure, Action action)
@@ -361,24 +425,40 @@ public class ClassicChessMain : MonoBehaviour
 
             Vector2 pos = clickedFigure.transform.position;
 
-            for (float x = -3.5f; x <= 3.5f; x += 1)
-            {
-                float y = x - pos.x + pos.y;
-                float uy = -x + pos.x + pos.y;
+            DiagonalPadding(pos.x + 1, x => x - pos.x + pos.y, 1, clickedFigure.isWhite);
+            DiagonalPadding(pos.x + 1, x => -x + pos.x + pos.y, 1, clickedFigure.isWhite);
 
-                if (Math.Abs(x) <= 3.5 && x != pos.x)
-                {
-                    if (y != pos.y && Math.Abs(y) <= 3.5)
-                    {
-                        AddEmptyCell(x, y);
-                    }
+            DiagonalPadding(pos.x - 1, x => x - pos.x + pos.y, -1, clickedFigure.isWhite);
+            DiagonalPadding(pos.x - 1, x => -x + pos.x + pos.y, -1, clickedFigure.isWhite);
 
-                    if (uy != pos.y && Math.Abs(uy) <= 3.5)
-                    {
-                        AddEmptyCell(x, uy);
-                    }
-                }
-            }
+            //float x = pos.x + 1;
+            //float y = x - pos.x + pos.y;
+
+            //while(!isCellOccupied(x, y) || x <= 3.5f || y <= 3.5f)
+            //{
+            //    AddEmptyCell(x, y);
+            //    x += 1;
+            //    y += 1;
+            //}
+
+            //for (float x = -3.5f; x <= 3.5f; x += 1)
+            //{
+            //    float y = x - pos.x + pos.y;
+            //    float uy = -x + pos.x + pos.y;
+
+            //    if (Math.Abs(x) <= 3.5 && x != pos.x)
+            //    {
+            //        if (y != pos.y && Math.Abs(y) <= 3.5)
+            //        {
+            //            AddEmptyCell(x, y);
+            //        }
+
+            //        if (uy != pos.y && Math.Abs(uy) <= 3.5)
+            //        {
+            //            AddEmptyCell(x, uy);
+            //        }
+            //    }
+            //}
         }
         else
         {
@@ -388,6 +468,26 @@ public class ClassicChessMain : MonoBehaviour
                 isWhiteMove = !isWhiteMove;
             }
             DestroyEmptyCells();
+        }
+    }
+
+    private void DiagonalPadding(float x, Func<float, float> y, int delta, bool isWhite)
+    {
+        bool canAttack = true;
+
+        while (Math.Abs(x) <= 3.5f && Math.Abs(y(x)) <= 3.5f && canAttack) 
+        {
+            if(isCellOccupied(x, y(x)))
+            {
+                if(GetAnOccupier(x, y(x)).GetComponent<Cell>().isWhite == isWhite)
+                {
+                    break;
+                }
+                canAttack = false;
+            }
+
+            AddEmptyCell(x, y(x));
+            x += delta;
         }
     }
 
@@ -411,6 +511,17 @@ public class ClassicChessMain : MonoBehaviour
                 {
                     AddEmptyCell(pos.x, pos.y + factor * 2);
                 }
+            }
+
+            if (isCellOccupied(pos.x + 1, pos.y + factor) &&
+               cellOccupied[(int)(pos.x + 1 + 3.5f), (int)(pos.y + factor + 3.5f)].GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                AddEmptyCell(pos.x + 1, pos.y + factor);
+            }
+            if (isCellOccupied(pos.x - 1, pos.y + factor) &&
+                cellOccupied[(int)(pos.x - 1 + 3.5f), (int)(pos.y + factor + 3.5f)].GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                AddEmptyCell(pos.x - 1, pos.y + factor);
             }
         }
         else
@@ -446,15 +557,17 @@ public class ClassicChessMain : MonoBehaviour
     {
         Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
 
-        //clickedFigure.transform.position = clickedCell.transform.position;
+        cellOccupied[(int)(clickedFigure.transform.position.x + 3.5f), (int)(clickedFigure.transform.position.y + 3.5f)] = null;
+
         clickedFigure.transform.position = new Vector3(clickedCell.transform.position.x, clickedCell.transform.position.y, -1);
         isWhiteMove = !isWhiteMove;
 
         if (clickedFigure.GetComponent<Pawn>())
         {
-
             clickedFigure.GetComponent<Pawn>().isFirstTurn = false;
         }
+
+        cellOccupied[(int)(clickedFigure.transform.position.x + 3.5f), (int)(clickedFigure.transform.position.y + 3.5f)] = clickedFigure.GameObject();
 
         DestroyEmptyCells();
     }
