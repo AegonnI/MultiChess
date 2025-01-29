@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ClassicChessMain : MonoBehaviour
 
     public GameObject bgCell;
     public GameObject emptyCell;
+    private static GameObject MoveCell;
 
     //White
     public King whiteKing;
@@ -58,9 +60,9 @@ public class ClassicChessMain : MonoBehaviour
     public Pawn blackPawn8;
     //
 
-    private List<GameObject> emptyCells;
-    private bool isWhiteMove;
-    private GameObject[,] cellOccupied;
+    private static List<GameObject> emptyCells;
+    private static bool isWhiteMove;
+    private static GameObject[,] cellOccupied;
     private List<GameObject> figures;
 
     public static GameObject ChoosenFigure;
@@ -74,6 +76,7 @@ public class ClassicChessMain : MonoBehaviour
         emptyCells = new List<GameObject>();
         ChoosenFigure = null;
         isWhiteMove = true;
+        MoveCell = emptyCell;
 
         cellOccupied = new GameObject[8,8];
         for (int i = 0; i < cellOccupied.GetLength(0); i++)
@@ -137,48 +140,48 @@ public class ClassicChessMain : MonoBehaviour
         //whiteKing.transform.position = new Vector3(4 - 3.5f, -7 + 3.5f, -1);
 
         //White
-        AppointFigure(whiteKing, () => whiteKing.FigureClick += OnKingClicked);
-        AppointFigure(whiteQueen, () => whiteQueen.FigureClick += OnQueenClicked);
+        AppointFigure(whiteKing, () => whiteKing.FigureClick += OnFigureClick);
+        AppointFigure(whiteQueen, () => whiteQueen.FigureClick += OnFigureClick);
 
-        AppointFigure(whiteRook1, () => whiteRook1.FigureClick += OnRookClicked);
-        AppointFigure(whiteRook2, () => whiteRook2.FigureClick += OnRookClicked);
+        AppointFigure(whiteRook1, () => whiteRook1.FigureClick += OnFigureClick);
+        AppointFigure(whiteRook2, () => whiteRook2.FigureClick += OnFigureClick);
 
-        AppointFigure(whiteKnight1, () => whiteKnight1.FigureClick += OnKnightClicked);
-        AppointFigure(whiteKnight2, () => whiteKnight2.FigureClick += OnKnightClicked);
+        AppointFigure(whiteKnight1, () => whiteKnight1.FigureClick += OnFigureClick);
+        AppointFigure(whiteKnight2, () => whiteKnight2.FigureClick += OnFigureClick);
 
-        AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnBishopClicked);
-        AppointFigure(whiteBishop2, () => whiteBishop2.FigureClick += OnBishopClicked);
+        AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnFigureClick);
+        AppointFigure(whiteBishop2, () => whiteBishop2.FigureClick += OnFigureClick);
 
-        AppointFigure(whitePawn1, () => whitePawn1.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn2, () => whitePawn2.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn3, () => whitePawn3.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn4, () => whitePawn4.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn5, () => whitePawn5.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn6, () => whitePawn6.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn7, () => whitePawn7.FigureClick += OnPawnClicked);
-        AppointFigure(whitePawn8, () => whitePawn8.FigureClick += OnPawnClicked);
+        AppointFigure(whitePawn1, () => whitePawn1.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn2, () => whitePawn2.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn3, () => whitePawn3.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn4, () => whitePawn4.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn5, () => whitePawn5.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn6, () => whitePawn6.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn7, () => whitePawn7.FigureClick += OnFigureClick);
+        AppointFigure(whitePawn8, () => whitePawn8.FigureClick += OnFigureClick);
 
         //black
-        AppointFigure(blackKing, () => blackKing.FigureClick += OnKingClicked);
-        AppointFigure(blackQueen, () => blackQueen.FigureClick += OnQueenClicked);
+        AppointFigure(blackKing, () => blackKing.FigureClick += OnFigureClick);
+        AppointFigure(blackQueen, () => blackQueen.FigureClick += OnFigureClick);
 
-        AppointFigure(blackRook1, () => blackRook1.FigureClick += OnRookClicked);
-        AppointFigure(blackRook2, () => blackRook2.FigureClick += OnRookClicked);
+        AppointFigure(blackRook1, () => blackRook1.FigureClick += OnFigureClick);
+        AppointFigure(blackRook2, () => blackRook2.FigureClick += OnFigureClick);
 
-        AppointFigure(blackKnight1, () => blackKnight1.FigureClick += OnKnightClicked);
-        AppointFigure(blackKnight2, () => blackKnight2.FigureClick += OnKnightClicked);
+        AppointFigure(blackKnight1, () => blackKnight1.FigureClick += OnFigureClick);
+        AppointFigure(blackKnight2, () => blackKnight2.FigureClick += OnFigureClick);
 
-        AppointFigure(blackBishop1, () => blackBishop1.FigureClick += OnBishopClicked);
-        AppointFigure(blackBishop2, () => blackBishop2.FigureClick += OnBishopClicked);
+        AppointFigure(blackBishop1, () => blackBishop1.FigureClick += OnFigureClick);
+        AppointFigure(blackBishop2, () => blackBishop2.FigureClick += OnFigureClick);
 
-        AppointFigure(blackPawn1, () => blackPawn1.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn2, () => blackPawn2.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn3, () => blackPawn3.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn4, () => blackPawn4.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn5, () => blackPawn5.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn6, () => blackPawn6.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn7, () => blackPawn7.FigureClick += OnPawnClicked);
-        AppointFigure(blackPawn8, () => blackPawn8.FigureClick += OnPawnClicked);
+        AppointFigure(blackPawn1, () => blackPawn1.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn2, () => blackPawn2.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn3, () => blackPawn3.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn4, () => blackPawn4.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn5, () => blackPawn5.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn6, () => blackPawn6.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn7, () => blackPawn7.FigureClick += OnFigureClick);
+        AppointFigure(blackPawn8, () => blackPawn8.FigureClick += OnFigureClick);
 
     }
 
@@ -187,15 +190,31 @@ public class ClassicChessMain : MonoBehaviour
         cellOccupied[(int)(gameObject.transform.position.x + 3.5f), (int)(gameObject.transform.position.y + 3.5f)] = gameObject;
     }
 
-    private bool isCellOccupied(float x, float y)
+    public static bool isCellOccupied(float x, float y)
     {
         return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)] != null;
     }
 
-    private GameObject GetAnOccupier(float x, float y)
+    private static GameObject GetAnOccupier(float x, float y)
     {
         return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)];
     }
+
+    public static bool IsOpponentOnTheCell(float x, float y, bool isWhite)
+    {
+        return isCellOccupied(x, y) && GetAnOccupier(x, y).GetComponent<Cell>().isWhite != isWhite;
+    }
+
+    //private void FiguresRegister()
+    //{
+    //    foreach (GameObject figure in figures)
+    //    {
+    //        if (figure != null)
+    //            figure.GetComponent<Cell>().FigureClick += OnFigureClick;
+    //        else
+    //            Debug.LogError("Необходимо назначить фигуру в ClassicChessMain!");
+    //    }
+    //}
 
     private void AppointFigure<T>(T figure, Action action)
     {
@@ -209,22 +228,27 @@ public class ClassicChessMain : MonoBehaviour
     private void OnDestroy()
     {
         if (whiteKing != null)
-            whiteKing.GetComponent<King>().FigureClick -= OnKingClicked;
+            whiteKing.GetComponent<King>().FigureClick -= OnFigureClick;
     }
 
-    private void OnFigureClick(Cell clickedFigure, Action<Vector2> action)
+    private void OnFigureClick(Cell clickedFigure, Action<Vector2, bool> action)
     {
-        Debug.Log($"Клик на короля: {clickedFigure.gameObject.name}");
+        Debug.Log($"Клик на: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked)
+        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
             figureClicked = true;
             ChoosenFigure = clickedFigure.GameObject();
 
-            action(clickedFigure.transform.position);
+            action(clickedFigure.transform.position, clickedFigure.isWhite);
         }
         else
         {
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            {
+                KillFigure(clickedFigure.GameObject());
+                isWhiteMove = !isWhiteMove;
+            }
             DestroyEmptyCells();
         }
     }
@@ -243,305 +267,70 @@ public class ClassicChessMain : MonoBehaviour
         }
     }
 
-    private void OnKingClicked(King clickedFigure)
+    public static void DirectFilling(float x, float y, bool isWhite)
     {
-        Debug.Log($"Клик на короля: {clickedFigure.gameObject.name}");
+        DirectPadding(x + 1, y, 1, 0);
+        DirectPadding(x - 1, y, -1, 0);
+        DirectPadding(x, y + 1, 0, 1);
+        DirectPadding(x, y - 1, 0, -1);
 
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
+        void DirectPadding(float x, float y, int deltaX, int deltaY)
         {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
+            bool canAttack = true;
 
-            KingPossibleTurns(clickedFigure.transform.position);
-        }
-        else
-        {            
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            while (Math.Abs(x) <= 3.5f && Math.Abs(y) <= 3.5f && canAttack)
             {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
-        }
-    }
+                if (isCellOccupied(x, y))
+                {
+                    if (GetAnOccupier(x, y).GetComponent<Cell>().isWhite == isWhite)
+                    {
+                        break;
+                    }
+                    canAttack = false;
+                }
 
-    private void KingPossibleTurns(Vector2 pos)
-    {
-        float x = pos.x + 1;
-        float y = pos.y + 1;
-        float dx = 0;
-        float dy = -1;
-
-        for (int i = 0; i < 8; i++)
-        {
-            if (Math.Abs(x) <= 3.5 && Math.Abs(y) <= 3.5)
-            {
                 AddEmptyCell(x, y);
+                x += deltaX;
+                y += deltaY;
             }
-
-            if (x + dx > pos.x + 1 || x + dx < pos.x - 1 || y + dy > pos.y + 1 || y + dy < pos.y - 1)
-            {
-                (dx, dy) = (dy, -dx);
-            }
-            x += dx;
-            y += dy;
         }
     }
 
-    private void OnQueenClicked(Queen clickedFigure)
+    public static void DiagonalFilling(float posX, float posY, bool isWhite)
     {
-        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
+        DiagonalPadding(posX + 1, x => x - posX + posY, 1);
+        DiagonalPadding(posX + 1, x => -x + posX + posY, 1);
+        DiagonalPadding(posX - 1, x => x - posX + posY, -1);
+        DiagonalPadding(posX - 1, x => -x + posX + posY, -1);
 
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
+        void DiagonalPadding(float x, Func<float, float> y, int delta)
         {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
+            bool canAttack = true;
 
-            Vector2 pos = clickedFigure.transform.position;
-
-            for (float i = -3.5f; i <= 3.5f; i += 1)
+            while (Math.Abs(x) <= 3.5f && Math.Abs(y(x)) <= 3.5f && canAttack)
             {
-                if (i != pos.x)
+                if (isCellOccupied(x, y(x)))
                 {
-                    AddEmptyCell(i, pos.y);
-                }
-                if (i != pos.y)
-                {
-                    AddEmptyCell(pos.x, i);
-                }
-
-            }
-
-            for (float x = -3.5f; x <= 3.5f; x += 1)
-            {
-                float y = x - pos.x + pos.y;
-                float uy = -x + pos.x + pos.y;
-
-                if (Math.Abs(x) <= 3.5 && x != pos.x)
-                {
-                    if (y != pos.y && Math.Abs(y) <= 3.5)
+                    if (GetAnOccupier(x, y(x)).GetComponent<Cell>().isWhite == isWhite)
                     {
-                        AddEmptyCell(x, y);
+                        break;
                     }
-
-                    if (uy != pos.y && Math.Abs(uy) <= 3.5)
-                    {
-                        AddEmptyCell(x, uy);
-                    }
+                    canAttack = false;
                 }
+
+                AddEmptyCell(x, y(x));
+                x += delta;
             }
-        }
-        else
-        {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
         }
     }
 
-    private void OnRookClicked(Rook clickedFigure)
+    public static void AddEmptyCell(float x, float y)
     {
-        Debug.Log($"Клик на ладью: {clickedFigure.gameObject.name}");
-
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
-        {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
-
-            Vector2 pos = clickedFigure.transform.position;
-
-            for (float i = -3.5f; i <= 3.5f; i += 1)
-            {
-                if (i != pos.x)
-                {
-                    AddEmptyCell(i, pos.y);
-                }
-                if (i != pos.y)
-                {
-                    AddEmptyCell(pos.x, i);
-                }
-            }
-        }
-        else
-        {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
-        }
-    }
-
-    private void OnKnightClicked(Knight clickedFigure)
-    {
-        Debug.Log($"Клик на коня: {clickedFigure.gameObject.name}");
-
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
-        {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
-
-            Vector2 pos = clickedFigure.transform.position;          
-
-            for (int i = -1 ; i <= 1; i += 2)
-            {
-                for (int j = -1; j <= 1; j += 2)
-                {
-                    if (Math.Abs(i * 1 + pos.x) <= 3.5 && Math.Abs(j * 2 + pos.y) <= 3.5)
-                    {
-                        AddEmptyCell(i * 1 + pos.x, j * 2 + pos.y);
-                    }
-
-                    if (Math.Abs(i * 2 + pos.x) <= 3.5 && Math.Abs(j * 1 + pos.y) <= 3.5)
-                    {
-                        AddEmptyCell(i * 2 + pos.x, j * 1 + pos.y);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
-        }
-    }
-
-    private void OnBishopClicked(Bishop clickedFigure)
-    {
-        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
-
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
-        {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
-
-            Vector2 pos = clickedFigure.transform.position;
-
-            DiagonalPadding(pos.x + 1, x => x - pos.x + pos.y, 1, clickedFigure.isWhite);
-            DiagonalPadding(pos.x + 1, x => -x + pos.x + pos.y, 1, clickedFigure.isWhite);
-
-            DiagonalPadding(pos.x - 1, x => x - pos.x + pos.y, -1, clickedFigure.isWhite);
-            DiagonalPadding(pos.x - 1, x => -x + pos.x + pos.y, -1, clickedFigure.isWhite);
-
-            //float x = pos.x + 1;
-            //float y = x - pos.x + pos.y;
-
-            //while(!isCellOccupied(x, y) || x <= 3.5f || y <= 3.5f)
-            //{
-            //    AddEmptyCell(x, y);
-            //    x += 1;
-            //    y += 1;
-            //}
-
-            //for (float x = -3.5f; x <= 3.5f; x += 1)
-            //{
-            //    float y = x - pos.x + pos.y;
-            //    float uy = -x + pos.x + pos.y;
-
-            //    if (Math.Abs(x) <= 3.5 && x != pos.x)
-            //    {
-            //        if (y != pos.y && Math.Abs(y) <= 3.5)
-            //        {
-            //            AddEmptyCell(x, y);
-            //        }
-
-            //        if (uy != pos.y && Math.Abs(uy) <= 3.5)
-            //        {
-            //            AddEmptyCell(x, uy);
-            //        }
-            //    }
-            //}
-        }
-        else
-        {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
-        }
-    }
-
-    private void DiagonalPadding(float x, Func<float, float> y, int delta, bool isWhite)
-    {
-        bool canAttack = true;
-
-        while (Math.Abs(x) <= 3.5f && Math.Abs(y(x)) <= 3.5f && canAttack) 
-        {
-            if(isCellOccupied(x, y(x)))
-            {
-                if(GetAnOccupier(x, y(x)).GetComponent<Cell>().isWhite == isWhite)
-                {
-                    break;
-                }
-                canAttack = false;
-            }
-
-            AddEmptyCell(x, y(x));
-            x += delta;
-        }
-    }
-
-    private void OnPawnClicked(Pawn clickedFigure)
-    {
-        Debug.Log($"Клик на ферзя: {clickedFigure.gameObject.name}");
-
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
-        {
-            figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
-
-            Vector2 pos = clickedFigure.transform.position;
-            int factor = clickedFigure.isWhite ? 1 : -1;
-
-            if (Math.Abs(pos.y + factor) <= 3.5)
-            {
-                AddEmptyCell(pos.x, pos.y + factor);
-
-                if (clickedFigure.isFirstTurn)
-                {
-                    AddEmptyCell(pos.x, pos.y + factor * 2);
-                }
-            }
-
-            if (isCellOccupied(pos.x + 1, pos.y + factor) &&
-               cellOccupied[(int)(pos.x + 1 + 3.5f), (int)(pos.y + factor + 3.5f)].GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                AddEmptyCell(pos.x + 1, pos.y + factor);
-            }
-            if (isCellOccupied(pos.x - 1, pos.y + factor) &&
-                cellOccupied[(int)(pos.x - 1 + 3.5f), (int)(pos.y + factor + 3.5f)].GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                AddEmptyCell(pos.x - 1, pos.y + factor);
-            }
-        }
-        else
-        {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
-            {
-                KillFigure(clickedFigure.GameObject());
-                isWhiteMove = !isWhiteMove;
-            }
-            DestroyEmptyCells();
-        }
-    }
-
-    public void AddEmptyCell(float x, float y)
-    {
-        emptyCells.Add(Instantiate(emptyCell, new Vector3(x, y, -0.9f), Quaternion.identity));
+        emptyCells.Add(Instantiate(MoveCell, new Vector3(x, y, -0.9f), Quaternion.identity));
         emptyCells.Last().GetComponent<EmptyCell>().emptyCellClick += OnEmptyCellClicked;
     }
 
-    private void DestroyEmptyCells()
+    private static void DestroyEmptyCells()
     {
         figureClicked = false;
         ChoosenFigure = null;
@@ -553,7 +342,7 @@ public class ClassicChessMain : MonoBehaviour
         emptyCells.Clear();
     }
 
-    private void OnEmptyCellClicked(EmptyCell clickedCell, GameObject clickedFigure)
+    private static void OnEmptyCellClicked(EmptyCell clickedCell, GameObject clickedFigure)
     {
         Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
 
