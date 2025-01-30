@@ -233,7 +233,7 @@ public class ClassicChessMain : MonoBehaviour
 
     private void OnFigureClick(Cell clickedFigure, Action<Vector2, bool> action)
     {
-        Debug.Log($"Клик на: {clickedFigure.gameObject.name}");
+        //Debug.Log($"Клик на: {clickedFigure.gameObject.name}");
 
         if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
         {
@@ -261,8 +261,10 @@ public class ClassicChessMain : MonoBehaviour
             Vector2 emptyCellPos = emptyCell.transform.position;
             if (emptyCellPos == figurePos)
             {
+                cellOccupied[(int)(figurePos.x + 3.5f), (int)(figurePos.y + 3.5f)] = null;
                 Destroy(clickedFigure.gameObject);
-                ChoosenFigure.transform.position = emptyCell.transform.position;
+
+                MoveTheFigure(ChoosenFigure, emptyCellPos.x, emptyCellPos.y);
             }
         }
     }
@@ -342,21 +344,26 @@ public class ClassicChessMain : MonoBehaviour
         emptyCells.Clear();
     }
 
+    private static void MoveTheFigure(GameObject figure, float newX, float newY)
+    {
+        cellOccupied[(int)(figure.transform.position.x + 3.5f), (int)(figure.transform.position.y + 3.5f)] = null;
+
+        figure.transform.position = new Vector3(newX, newY, -1);
+
+        cellOccupied[(int)(figure.transform.position.x + 3.5f), (int)(figure.transform.position.y + 3.5f)] = figure;
+    }
+
     private static void OnEmptyCellClicked(EmptyCell clickedCell, GameObject clickedFigure)
     {
-        Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
+        //Debug.Log($"Клик на клетку для хода: {clickedCell.gameObject.name}");
 
-        cellOccupied[(int)(clickedFigure.transform.position.x + 3.5f), (int)(clickedFigure.transform.position.y + 3.5f)] = null;
-
-        clickedFigure.transform.position = new Vector3(clickedCell.transform.position.x, clickedCell.transform.position.y, -1);
+        MoveTheFigure(clickedFigure, clickedCell.transform.position.x, clickedCell.transform.position.y);
         isWhiteMove = !isWhiteMove;
 
         if (clickedFigure.GetComponent<Pawn>())
         {
             clickedFigure.GetComponent<Pawn>().isFirstTurn = false;
         }
-
-        cellOccupied[(int)(clickedFigure.transform.position.x + 3.5f), (int)(clickedFigure.transform.position.y + 3.5f)] = clickedFigure.GameObject();
 
         DestroyEmptyCells();
     }
