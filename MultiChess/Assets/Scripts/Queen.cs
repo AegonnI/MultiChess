@@ -17,7 +17,7 @@ public class Queen : Cell
 
     private void PossibleTurns(Vector2 pos, bool isWhite)
     {
-        ClassicChessMain.DirectFilling(pos.x, pos.y, isWhite);
-        ClassicChessMain.DiagonalFilling(pos.x, pos.y, isWhite);
+        DirectFilling(pos.x, pos.y, isWhite);
+        DiagonalFilling(pos.x, pos.y, isWhite);
     }
 }

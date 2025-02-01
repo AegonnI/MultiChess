@@ -737,6 +737,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a7e04078db95b498cd40d2e58b8398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _fieldSize: 8
+  _scale: 1
   bgCell: {fileID: 675120949673373897, guid: 40f26f1ad19f70d449b1a0f7e76fe3e5, type: 3}
   emptyCell: {fileID: 1692165357936152233, guid: 8486f9300c72fc24f80e5e0344755fc3, type: 3}
   whiteKing: {fileID: 1767669619}

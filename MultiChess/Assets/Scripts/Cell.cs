@@ -10,5 +10,60 @@ public class Cell : MonoBehaviour
     protected bool isClicked;
     public bool isWhite;
 
-    //public event Action<this, Action<Vector2, bool>> FigureClick;
+    protected static void DirectFilling(float x, float y, bool isWhite)
+    {
+        DirectPadding(x + 1, y, 1, 0);
+        DirectPadding(x - 1, y, -1, 0);
+        DirectPadding(x, y + 1, 0, 1);
+        DirectPadding(x, y - 1, 0, -1);
+
+        void DirectPadding(float x, float y, int deltaX, int deltaY)
+        {
+            bool canAttack = true;
+
+            while (Math.Abs(x) <= ClassicChessMain.border && Math.Abs(y) <= ClassicChessMain.border && canAttack)
+            {
+                if (ClassicChessMain.isCellOccupied(x, y))
+                {
+                    if (ClassicChessMain.GetAnOccupier(x, y).GetComponent<Cell>().isWhite == isWhite)
+                    {
+                        break;
+                    }
+                    canAttack = false;
+                }
+
+                ClassicChessMain.AddEmptyCell(x, y);
+                x += deltaX;
+                y += deltaY;
+            }
+        }
+    }
+
+     protected static void DiagonalFilling(float posX, float posY, bool isWhite)
+    {
+        DiagonalPadding(posX + 1, x => x - posX + posY, 1);
+        DiagonalPadding(posX + 1, x => -x + posX + posY, 1);
+        DiagonalPadding(posX - 1, x => x - posX + posY, -1);
+        DiagonalPadding(posX - 1, x => -x + posX + posY, -1);
+
+        void DiagonalPadding(float x, Func<float, float> y, int delta)
+        {
+            bool canAttack = true;
+
+            while (Math.Abs(x) <= ClassicChessMain.border && Math.Abs(y(x)) <= ClassicChessMain.border && canAttack)
+            {
+                if (ClassicChessMain.isCellOccupied(x, y(x)))
+                {
+                    if (ClassicChessMain.GetAnOccupier(x, y(x)).GetComponent<Cell>().isWhite == isWhite)
+                    {
+                        break;
+                    }
+                    canAttack = false;
+                }
+
+                ClassicChessMain.AddEmptyCell(x, y(x));
+                x += delta;
+            }
+        }
+    }
 }

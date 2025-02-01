@@ -5,11 +5,15 @@ using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
 public class ClassicChessMain : MonoBehaviour
 {
-    private const byte _fieldSize = 8;
+    public byte _fieldSize = 8;
+    public byte _scale = 1;
+    public static float border;
+    public static float scale;
 
     public GameObject bgCell;
     public GameObject emptyCell;
@@ -77,8 +81,10 @@ public class ClassicChessMain : MonoBehaviour
         ChoosenFigure = null;
         isWhiteMove = true;
         MoveCell = emptyCell;
+        border = 0.5f * (_fieldSize - 1);
+        scale = _scale;
 
-        cellOccupied = new GameObject[8,8];
+        cellOccupied = new GameObject[_fieldSize, _fieldSize];
         for (int i = 0; i < cellOccupied.GetLength(0); i++)
         {
             for (int j = 0; j < cellOccupied.GetLength(0); j++)
@@ -126,6 +132,7 @@ public class ClassicChessMain : MonoBehaviour
             FillcellOccupied(figure);
         }
 
+        bgCell.transform.localScale = new Vector2(_scale, _scale);
         for (int i = 0; i < _fieldSize; i++)
         {
             for (int j = 0; j < _fieldSize; j++)
@@ -133,7 +140,7 @@ public class ClassicChessMain : MonoBehaviour
                 bgCell.GetComponent<SpriteRenderer>().color = (i + j + 2) % 2 == 0 ? new Color(0.9f, 0.9f, 0.8f, 1f) : new Color(0.27f, 0.3f, 0.37f, 1f);
                 bgCell.name = "bgCell [" + i + ';' + j + "]";
 
-                Instantiate(bgCell, new Vector2(j - 3.5f, - i + 3.5f), Quaternion.identity);
+                Instantiate(bgCell, new Vector2(_scale * (j - border), _scale * (- i + border)), Quaternion.identity);
             }
         }
 
@@ -185,36 +192,35 @@ public class ClassicChessMain : MonoBehaviour
 
     }
 
+    private static Vector2 GetCoords(float x, float y)
+    {
+        return new Vector2((x/scale) + border, -(y/scale) + border);
+    }
+
+    public static GameObject GetAnOccupier(float x, float y)
+    {
+        return cellOccupied[(int)GetCoords(x, y).x, (int)GetCoords(x, y).y];
+    }
+
+    public static void SetAnOccupier(float x, float y, GameObject newOccupier)
+    {
+        cellOccupied[(int)GetCoords(x, y).x, (int)GetCoords(x, y).y] = newOccupier;
+    }
+
     private void FillcellOccupied(GameObject gameObject)
     {
-        cellOccupied[(int)(gameObject.transform.position.x + 3.5f), (int)(gameObject.transform.position.y + 3.5f)] = gameObject;
+        SetAnOccupier(gameObject.transform.position.x, gameObject.transform.position.y, gameObject);
     }
 
     public static bool isCellOccupied(float x, float y)
     {
-        return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)] != null;
-    }
-
-    private static GameObject GetAnOccupier(float x, float y)
-    {
-        return cellOccupied[(int)(x + 3.5f), (int)(y + 3.5f)];
+        return GetAnOccupier(x, y) != null;
     }
 
     public static bool IsOpponentOnTheCell(float x, float y, bool isWhite)
     {
         return isCellOccupied(x, y) && GetAnOccupier(x, y).GetComponent<Cell>().isWhite != isWhite;
     }
-
-    //private void FiguresRegister()
-    //{
-    //    foreach (GameObject figure in figures)
-    //    {
-    //        if (figure != null)
-    //            figure.GetComponent<Cell>().FigureClick += OnFigureClick;
-    //        else
-    //            Debug.LogError("Необходимо назначить фигуру в ClassicChessMain!");
-    //    }
-    //}
 
     private void AppointFigure<T>(T figure, Action action)
     {
@@ -223,7 +229,6 @@ public class ClassicChessMain : MonoBehaviour
         else
             Debug.LogError("Необходимо назначить фигуру в ClassicChessMain!");
     }
-
 
     private void OnDestroy()
     {
@@ -261,67 +266,10 @@ public class ClassicChessMain : MonoBehaviour
             Vector2 emptyCellPos = emptyCell.transform.position;
             if (emptyCellPos == figurePos)
             {
-                cellOccupied[(int)(figurePos.x + 3.5f), (int)(figurePos.y + 3.5f)] = null;
+                SetAnOccupier(figurePos.x, figurePos.y, null);
                 Destroy(clickedFigure.gameObject);
 
                 MoveTheFigure(ChoosenFigure, emptyCellPos.x, emptyCellPos.y);
-            }
-        }
-    }
-
-    public static void DirectFilling(float x, float y, bool isWhite)
-    {
-        DirectPadding(x + 1, y, 1, 0);
-        DirectPadding(x - 1, y, -1, 0);
-        DirectPadding(x, y + 1, 0, 1);
-        DirectPadding(x, y - 1, 0, -1);
-
-        void DirectPadding(float x, float y, int deltaX, int deltaY)
-        {
-            bool canAttack = true;
-
-            while (Math.Abs(x) <= 3.5f && Math.Abs(y) <= 3.5f && canAttack)
-            {
-                if (isCellOccupied(x, y))
-                {
-                    if (GetAnOccupier(x, y).GetComponent<Cell>().isWhite == isWhite)
-                    {
-                        break;
-                    }
-                    canAttack = false;
-                }
-
-                AddEmptyCell(x, y);
-                x += deltaX;
-                y += deltaY;
-            }
-        }
-    }
-
-    public static void DiagonalFilling(float posX, float posY, bool isWhite)
-    {
-        DiagonalPadding(posX + 1, x => x - posX + posY, 1);
-        DiagonalPadding(posX + 1, x => -x + posX + posY, 1);
-        DiagonalPadding(posX - 1, x => x - posX + posY, -1);
-        DiagonalPadding(posX - 1, x => -x + posX + posY, -1);
-
-        void DiagonalPadding(float x, Func<float, float> y, int delta)
-        {
-            bool canAttack = true;
-
-            while (Math.Abs(x) <= 3.5f && Math.Abs(y(x)) <= 3.5f && canAttack)
-            {
-                if (isCellOccupied(x, y(x)))
-                {
-                    if (GetAnOccupier(x, y(x)).GetComponent<Cell>().isWhite == isWhite)
-                    {
-                        break;
-                    }
-                    canAttack = false;
-                }
-
-                AddEmptyCell(x, y(x));
-                x += delta;
             }
         }
     }
@@ -346,11 +294,11 @@ public class ClassicChessMain : MonoBehaviour
 
     private static void MoveTheFigure(GameObject figure, float newX, float newY)
     {
-        cellOccupied[(int)(figure.transform.position.x + 3.5f), (int)(figure.transform.position.y + 3.5f)] = null;
+        SetAnOccupier(figure.transform.position.x, figure.transform.position.y, null);
 
         figure.transform.position = new Vector3(newX, newY, -1);
-
-        cellOccupied[(int)(figure.transform.position.x + 3.5f), (int)(figure.transform.position.y + 3.5f)] = figure;
+        
+        SetAnOccupier(figure.transform.position.x, figure.transform.position.y, figure);
     }
 
     private static void OnEmptyCellClicked(EmptyCell clickedCell, GameObject clickedFigure)

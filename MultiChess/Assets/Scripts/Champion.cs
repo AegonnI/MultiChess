@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rook : Cell
+public class Champion : Cell
 {
-    public event Action<Rook, Action<Vector2, bool>> FigureClick;
+    public event Action<Champion, Action<Vector2, bool>> FigureClick;
 
     private void OnMouseDown()
     {
@@ -17,6 +17,6 @@ public class Rook : Cell
 
     private void PossibleTurns(Vector2 pos, bool isWhite)
     {
-        DirectFilling(pos.x, pos.y, isWhite);
+
     }
 }

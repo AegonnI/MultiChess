@@ -25,7 +25,7 @@ public class Pawn : Cell
     {
         int factor = isWhite ? 1 : -1;
 
-        if (!ClassicChessMain.isCellOccupied(pos.x, pos.y + factor) && Math.Abs(pos.y + factor) <= 3.5)
+        if (!ClassicChessMain.isCellOccupied(pos.x, pos.y + factor) && Math.Abs(pos.y + factor) <= ClassicChessMain.border)
         {
             ClassicChessMain.AddEmptyCell(pos.x, pos.y + factor);
 
@@ -35,15 +35,15 @@ public class Pawn : Cell
             }
         }
 
-        if (Math.Abs(pos.y + factor) <= 3.5f)
+        if (Math.Abs(pos.y + factor) <= ClassicChessMain.border)
         {
-            if (Math.Abs(pos.x + 1) <= 3.5f &&
+            if (Math.Abs(pos.x + 1) <= ClassicChessMain.border &&
                 ClassicChessMain.isCellOccupied(pos.x + 1, pos.y + factor) &&
                 ClassicChessMain.IsOpponentOnTheCell(pos.x + 1, pos.y + factor, isWhite))
             {
                 ClassicChessMain.AddEmptyCell(pos.x + 1, pos.y + factor);
             }
-            if (Math.Abs(pos.x - 1) <= 3.5f &&
+            if (Math.Abs(pos.x - 1) <= ClassicChessMain.border &&
                 ClassicChessMain.isCellOccupied(pos.x - 1, pos.y + factor) &&
                 ClassicChessMain.IsOpponentOnTheCell(pos.x - 1, pos.y + factor, isWhite))
             {

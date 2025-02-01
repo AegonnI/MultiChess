@@ -23,8 +23,8 @@ public class King : Cell
 
         for (int i = 0; i < 8; i++)
         {
-            if (Math.Abs(x) <= 3.5 &&
-                Math.Abs(y) <= 3.5 && (
+            if (Math.Abs(x) <= ClassicChessMain.border &&
+                Math.Abs(y) <= ClassicChessMain.border && (
                 ClassicChessMain.IsOpponentOnTheCell(x, y, isWhite) ||
                 !ClassicChessMain.isCellOccupied(x, y)))
             {
