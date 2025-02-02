@@ -64,6 +64,9 @@ public class ClassicChessMain : MonoBehaviour
     public Pawn blackPawn8;
     //
 
+    public Champion champion;
+    private List<GameObject> figures2;
+
     private static List<GameObject> emptyCells;
     private static bool isWhiteMove;
     private static GameObject[,] cellOccupied;
@@ -92,6 +95,10 @@ public class ClassicChessMain : MonoBehaviour
                 cellOccupied[i,j] = null;
             }
         }
+
+        figures2 = new List<GameObject>();
+        figures2.Add(Instantiate(champion.gameObject, new Vector3(1 / (2*_scale) + border, -1 / (2 * _scale) + border, -1), Quaternion.identity));
+        //figures2.Last().GetComponent<Champion>().FigureClick += figureClicked;
 
         figures = new List<GameObject>();
         figures.Add(whiteKing.GameObject());

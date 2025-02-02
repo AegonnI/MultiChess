@@ -17,6 +17,6 @@ public class Rook : Cell
 
     private void PossibleTurns(Vector2 pos, bool isWhite)
     {
-        DirectFilling(pos.x, pos.y, isWhite);
+        DirectFilling(pos.x, pos.y, (int)(2 * ClassicChessMain.border), isWhite);
     }
 }

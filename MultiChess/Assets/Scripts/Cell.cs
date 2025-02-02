@@ -10,7 +10,7 @@ public class Cell : MonoBehaviour
     protected bool isClicked;
     public bool isWhite;
 
-    protected static void DirectFilling(float x, float y, bool isWhite)
+    protected static void DirectFilling(float x, float y, int maxDistance, bool isWhite)
     {
         DirectPadding(x + 1, y, 1, 0);
         DirectPadding(x - 1, y, -1, 0);
@@ -20,8 +20,9 @@ public class Cell : MonoBehaviour
         void DirectPadding(float x, float y, int deltaX, int deltaY)
         {
             bool canAttack = true;
+            int c = 0;
 
-            while (Math.Abs(x) <= ClassicChessMain.border && Math.Abs(y) <= ClassicChessMain.border && canAttack)
+            while (Math.Abs(x) <= ClassicChessMain.border && Math.Abs(y) <= ClassicChessMain.border && canAttack && c < maxDistance)
             {
                 if (ClassicChessMain.isCellOccupied(x, y))
                 {
@@ -35,11 +36,12 @@ public class Cell : MonoBehaviour
                 ClassicChessMain.AddEmptyCell(x, y);
                 x += deltaX;
                 y += deltaY;
+                c++;
             }
         }
     }
 
-     protected static void DiagonalFilling(float posX, float posY, bool isWhite)
+     protected static void DiagonalFilling(float posX, float posY,bool isWhite)
     {
         DiagonalPadding(posX + 1, x => x - posX + posY, 1);
         DiagonalPadding(posX + 1, x => -x + posX + posY, 1);
