@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
-public class King : Cell
+public class King : Cell, IFigure<King>
 {
     public event Action<King, Action<Vector2, bool>> FigureClick;
 

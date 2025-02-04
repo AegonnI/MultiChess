@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Queen : Cell
+public class Queen : Cell, IFigure<Queen>
 {
     public event Action<Queen, Action<Vector2, bool>> FigureClick;
 

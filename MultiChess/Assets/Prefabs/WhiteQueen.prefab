@@ -143,4 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02b9b2b40f39904eb9fff079c75b101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWhite: 0
+  isWhite: 1

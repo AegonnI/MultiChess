@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,48 +21,43 @@ public class ClassicChessMain : MonoBehaviour
     private static GameObject MoveCell;
 
     //White
+    public Sprite whiteKingSprite;
+
+    public Vector2[] whiteKingsCoords;
     public King whiteKing;
+    public Vector2[] whiteQueensCoords;
     public Queen whiteQueen;
 
-    public Rook whiteRook1;
-    public Rook whiteRook2;
+    public Vector2[] whiteRooksCoords;
+    public Rook whiteRook;
 
-    public Knight whiteKnight1;
-    public Knight whiteKnight2;
+    public Vector2[] whiteKnightsCoords;
+    public Knight whiteKnight;
 
-    public Bishop whiteBishop1;
-    public Bishop whiteBishop2;
+    public Vector2[] whiteBishopsCoords;
+    public Bishop whiteBishop;
 
-    public Pawn whitePawn1;
-    public Pawn whitePawn2;
-    public Pawn whitePawn3;
-    public Pawn whitePawn4;
-    public Pawn whitePawn5;
-    public Pawn whitePawn6;
-    public Pawn whitePawn7;
-    public Pawn whitePawn8;
+    public Vector2[] whitePawnsCoords;
+    public Pawn whitePawn;
 
     //Black
+
+    public Vector2[] blackKingsCoords;
     public King blackKing;
+    public Vector2[] blackQueensCoords;
     public Queen blackQueen;
 
-    public Rook blackRook1;
-    public Rook blackRook2;
+    public Vector2[] blackRooksCoords;
+    public Rook blackRook;
 
-    public Knight blackKnight1;
-    public Knight blackKnight2;
+    public Vector2[] blackKnightsCoords;
+    public Knight blackKnight;
 
-    public Bishop blackBishop1;
-    public Bishop blackBishop2;
+    public Vector2[] blackBishopsCoords;
+    public Bishop blackBishop;
 
-    public Pawn blackPawn1;
-    public Pawn blackPawn2;
-    public Pawn blackPawn3;
-    public Pawn blackPawn4;
-    public Pawn blackPawn5;
-    public Pawn blackPawn6;
-    public Pawn blackPawn7;
-    public Pawn blackPawn8;
+    public Vector2[] blackPawnsCoords;
+    public Pawn blackPawn;
     //
 
     public Champion champion;
@@ -96,50 +92,32 @@ public class ClassicChessMain : MonoBehaviour
             }
         }
 
-        figures2 = new List<GameObject>();
-        figures2.Add(Instantiate(champion.gameObject, new Vector3(1 / (2*_scale) + border, -1 / (2 * _scale) + border, -1), Quaternion.identity));
-        //figures2.Last().GetComponent<Champion>().FigureClick += figureClicked;
-
         figures = new List<GameObject>();
-        figures.Add(whiteKing.GameObject());
-        figures.Add(whiteQueen.GameObject());
-        figures.Add(whiteRook1.GameObject());
-        figures.Add(whiteRook2.GameObject());
-        figures.Add(whiteKnight1.GameObject());
-        figures.Add(whiteKnight2.GameObject());
-        figures.Add(whiteBishop1.GameObject());
-        figures.Add(whiteBishop2.GameObject());
-        figures.Add(whitePawn1.GameObject());
-        figures.Add(whitePawn2.GameObject());
-        figures.Add(whitePawn3.GameObject());
-        figures.Add(whitePawn4.GameObject());
-        figures.Add(whitePawn5.GameObject());
-        figures.Add(whitePawn6.GameObject());
-        figures.Add(whitePawn7.GameObject());
-        figures.Add(whitePawn8.GameObject());
-        figures.Add(blackKing.GameObject());
-        figures.Add(blackQueen.GameObject());
-        figures.Add(blackRook1.GameObject());
-        figures.Add(blackRook2.GameObject());
-        figures.Add(blackKnight1.GameObject());
-        figures.Add(blackKnight2.GameObject());
-        figures.Add(blackBishop1.GameObject());
-        figures.Add(blackBishop2.GameObject());
-        figures.Add(blackPawn1.GameObject());
-        figures.Add(blackPawn2.GameObject());
-        figures.Add(blackPawn3.GameObject());
-        figures.Add(blackPawn4.GameObject());
-        figures.Add(blackPawn5.GameObject());
-        figures.Add(blackPawn6.GameObject());
-        figures.Add(blackPawn7.GameObject());
-        figures.Add(blackPawn8.GameObject());
+
+        //figures2 = new List<GameObject>();
+        figures.Add(Instantiate(champion.gameObject, new Vector3(1f / 2, -1f / 2, -1), Quaternion.identity));
+        figures.Last().GetComponent<Champion>().FigureClick += OnFigureClick;
+
+        SpawnFigure(whiteKing, whiteKingsCoords);
+        SpawnFigure(whiteQueen, whiteQueensCoords);
+        SpawnFigure(whiteRook, whiteRooksCoords);
+        SpawnFigure(whiteKnight, whiteKnightsCoords);
+        SpawnFigure(whiteBishop, whiteBishopsCoords);
+        SpawnFigure(whitePawn, whitePawnsCoords);
+
+        SpawnFigure(blackKing, blackKingsCoords);
+        SpawnFigure(blackQueen, blackQueensCoords);
+        SpawnFigure(blackRook, blackRooksCoords);
+        SpawnFigure(blackKnight, blackKnightsCoords);
+        SpawnFigure(blackBishop, blackBishopsCoords);
+        SpawnFigure(blackPawn, blackPawnsCoords);
 
         foreach (GameObject figure in figures)
         {
             FillcellOccupied(figure);
         }
 
-        bgCell.transform.localScale = new Vector2(_scale, _scale);
+        bgCell.transform.localScale = new Vector2(scale, scale);
         for (int i = 0; i < _fieldSize; i++)
         {
             for (int j = 0; j < _fieldSize; j++)
@@ -147,56 +125,23 @@ public class ClassicChessMain : MonoBehaviour
                 bgCell.GetComponent<SpriteRenderer>().color = (i + j + 2) % 2 == 0 ? new Color(0.9f, 0.9f, 0.8f, 1f) : new Color(0.27f, 0.3f, 0.37f, 1f);
                 bgCell.name = "bgCell [" + i + ';' + j + "]";
 
-                Instantiate(bgCell, new Vector2(_scale * (j - border), _scale * (- i + border)), Quaternion.identity);
+                Instantiate(bgCell, new Vector2(scale * (j - border), scale * (- i + border)), Quaternion.identity);
             }
         }
+    }
 
-        //whiteKing.transform.position = new Vector3(4 - 3.5f, -7 + 3.5f, -1);
+    private void SpawnFigure<T>(T figure, Vector2[] coords) where T : IFigure<T>, IGameObjectProvider
+    {
+        for (int i = 0; i < coords.Length; i++)
+        {
+            figures.Add(Instantiate(figure.GetGameObject(), LeftBottonCoords(coords[i].x, coords[i].y), Quaternion.identity));
+            figures.Last().GetComponent<T>().FigureClick += OnFigureClick;
+        }
+    }
 
-        //White
-        AppointFigure(whiteKing, () => whiteKing.FigureClick += OnFigureClick);
-        AppointFigure(whiteQueen, () => whiteQueen.FigureClick += OnFigureClick);
-
-        AppointFigure(whiteRook1, () => whiteRook1.FigureClick += OnFigureClick);
-        AppointFigure(whiteRook2, () => whiteRook2.FigureClick += OnFigureClick);
-
-        AppointFigure(whiteKnight1, () => whiteKnight1.FigureClick += OnFigureClick);
-        AppointFigure(whiteKnight2, () => whiteKnight2.FigureClick += OnFigureClick);
-
-        AppointFigure(whiteBishop1, () => whiteBishop1.FigureClick += OnFigureClick);
-        AppointFigure(whiteBishop2, () => whiteBishop2.FigureClick += OnFigureClick);
-
-        AppointFigure(whitePawn1, () => whitePawn1.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn2, () => whitePawn2.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn3, () => whitePawn3.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn4, () => whitePawn4.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn5, () => whitePawn5.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn6, () => whitePawn6.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn7, () => whitePawn7.FigureClick += OnFigureClick);
-        AppointFigure(whitePawn8, () => whitePawn8.FigureClick += OnFigureClick);
-
-        //black
-        AppointFigure(blackKing, () => blackKing.FigureClick += OnFigureClick);
-        AppointFigure(blackQueen, () => blackQueen.FigureClick += OnFigureClick);
-
-        AppointFigure(blackRook1, () => blackRook1.FigureClick += OnFigureClick);
-        AppointFigure(blackRook2, () => blackRook2.FigureClick += OnFigureClick);
-
-        AppointFigure(blackKnight1, () => blackKnight1.FigureClick += OnFigureClick);
-        AppointFigure(blackKnight2, () => blackKnight2.FigureClick += OnFigureClick);
-
-        AppointFigure(blackBishop1, () => blackBishop1.FigureClick += OnFigureClick);
-        AppointFigure(blackBishop2, () => blackBishop2.FigureClick += OnFigureClick);
-
-        AppointFigure(blackPawn1, () => blackPawn1.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn2, () => blackPawn2.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn3, () => blackPawn3.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn4, () => blackPawn4.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn5, () => blackPawn5.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn6, () => blackPawn6.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn7, () => blackPawn7.FigureClick += OnFigureClick);
-        AppointFigure(blackPawn8, () => blackPawn8.FigureClick += OnFigureClick);
-
+    private Vector3 LeftBottonCoords(float x, float y)
+    {
+        return new Vector3(_scale * (x - 1 - border), _scale * (y - 1 - border), -1);
     }
 
     private static Vector2 GetCoords(float x, float y)
@@ -243,22 +188,22 @@ public class ClassicChessMain : MonoBehaviour
             whiteKing.GetComponent<King>().FigureClick -= OnFigureClick;
     }
 
-    private void OnFigureClick(Cell clickedFigure, Action<Vector2, bool> action)
+    private void OnFigureClick<T>(T clickedFigure, Action<Vector2, bool> action) where T : IFigure<T>, IGameObjectProvider
     {
         //Debug.Log($" лик на: {clickedFigure.gameObject.name}");
 
-        if (!figureClicked && isWhiteMove == clickedFigure.isWhite)
+        if (!figureClicked && isWhiteMove == clickedFigure.IsWhite)
         {
             figureClicked = true;
-            ChoosenFigure = clickedFigure.GameObject();
+            ChoosenFigure = clickedFigure.GetGameObject();
 
-            action(clickedFigure.transform.position, clickedFigure.isWhite);
+            action(clickedFigure.GetGameObject().transform.position, clickedFigure.IsWhite);
         }
         else
         {
-            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.isWhite)
+            if (ChoosenFigure != null && ChoosenFigure.GetComponent<Cell>().isWhite != clickedFigure.IsWhite)
             {
-                KillFigure(clickedFigure.GameObject());
+                KillFigure(clickedFigure.GetGameObject());
                 isWhiteMove = !isWhiteMove;
             }
             DestroyEmptyCells();

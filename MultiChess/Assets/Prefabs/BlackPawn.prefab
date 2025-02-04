@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1264901880626243001}
   - component: {fileID: 6287524537878404684}
   - component: {fileID: 6563388389496077953}
-  - component: {fileID: 2304870853595860825}
   - component: {fileID: 1471639104339401165}
   m_Layer: 0
   m_Name: BlackPawn
@@ -132,19 +131,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2304870853595860825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8278866218407238542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0af51111339b86148a38fe6d0644aa90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWhite: 0
 --- !u!114 &1471639104339401165
 MonoBehaviour:
   m_ObjectHideFlags: 0

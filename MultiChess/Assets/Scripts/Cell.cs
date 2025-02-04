@@ -4,11 +4,25 @@ using UnityEngine;
 using System.Web;
 using System;
 
-public class Cell : MonoBehaviour
+public interface IFigure<T>
+{
+    event Action<T, Action<Vector2, bool>> FigureClick;
+    bool IsWhite { get; }
+}
+
+public interface IGameObjectProvider
+{
+    GameObject GetGameObject();
+}
+
+public class Cell : MonoBehaviour, IGameObjectProvider
 {
     protected KeyValuePair<int, int> index;
     protected bool isClicked;
     public bool isWhite;
+
+    //public event Action<Cell, Action<Vector2, bool>> FigureClick;
+    public bool IsWhite => isWhite;
 
     protected static void DirectFilling(float x, float y, int maxDistance, bool isWhite)
     {
@@ -67,5 +81,10 @@ public class Cell : MonoBehaviour
                 x += delta;
             }
         }
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
     }
 }
