@@ -15,6 +15,8 @@ public class ClassicChessMain : MonoBehaviour
     public byte _scale = 1;
     public static float border;
     public static float scale;
+    public static string SkinPath;
+    public static float scalingFactor;
 
     public GameObject bgCell;
     public GameObject emptyCell;
@@ -82,6 +84,8 @@ public class ClassicChessMain : MonoBehaviour
         MoveCell = emptyCell;
         border = 0.5f * (_fieldSize - 1);
         scale = _scale;
+        SkinPath = "PixelClassic";
+        scalingFactor = scale / 0.16f;
 
         cellOccupied = new GameObject[_fieldSize, _fieldSize];
         for (int i = 0; i < cellOccupied.GetLength(0); i++)

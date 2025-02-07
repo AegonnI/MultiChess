@@ -7,6 +7,13 @@ public class Knight : Cell, IFigure<Knight>
 {
     public event Action<Knight, Action<Vector2, bool>> FigureClick;
 
+    private void Start()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteKnight" : "BlackKnight"));
+        Rect spriteSize = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteKnight" : "BlackKnight")).rect;
+        gameObject.transform.localScale = new Vector2((spriteSize.width / 100) * ClassicChessMain.scalingFactor, (spriteSize.height / 100) * ClassicChessMain.scalingFactor);
+    }
+
     private void OnMouseDown()
     {
         if (FigureClick != null)

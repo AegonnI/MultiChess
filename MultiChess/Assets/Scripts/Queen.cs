@@ -7,6 +7,13 @@ public class Queen : Cell, IFigure<Queen>
 {
     public event Action<Queen, Action<Vector2, bool>> FigureClick;
 
+    private void Start()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteQueen" : "BlackQueen"));
+        Rect spriteSize = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteQueen" : "BlackQueen")).rect;
+        gameObject.transform.localScale = new Vector2((spriteSize.width / 100) * ClassicChessMain.scalingFactor, (spriteSize.height / 100) * ClassicChessMain.scalingFactor);
+    }
+
     private void OnMouseDown()
     {
         if (FigureClick != null)

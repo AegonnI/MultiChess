@@ -2,11 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
 public class King : Cell, IFigure<King>
 {
     public event Action<King, Action<Vector2, bool>> FigureClick;
+
+    private void Start()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteKing" : "BlackKing"));
+        Rect spriteSize = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhiteKing" : "BlackKing")).rect;
+        gameObject.transform.localScale = new Vector2((spriteSize.width / 100) * ClassicChessMain.scalingFactor, (spriteSize.height / 100) * ClassicChessMain.scalingFactor);
+    }
 
     private void OnMouseDown()
     {
@@ -37,5 +45,16 @@ public class King : Cell, IFigure<King>
             }
             x += dx; y += dy;
         }
+    }
+
+    private bool Check()
+    {
+        //Vector2 pos = gameObject.transform.position;
+
+        //for(float i = pos.x; i < ClassicChessMain.border; i++)
+        //{
+        //    ClassicChessMain.IsOpponentOnTheCell(x, y, isWhite);
+        //}
+        return false;
     }
 }

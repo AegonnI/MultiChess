@@ -11,6 +11,10 @@ public class Pawn : Cell, IFigure<Pawn>
     private void Start()
     {
         isFirstTurn = true;
+
+        gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhitePawn" : "BlackPawn"));
+        Rect spriteSize = Resources.Load<Sprite>(ClassicChessMain.SkinPath + "\\" + (isWhite ? "WhitePawn" : "BlackPawn")).rect;
+        gameObject.transform.localScale = new Vector2((spriteSize.width / 100) * ClassicChessMain.scalingFactor, (spriteSize.height / 100) * ClassicChessMain.scalingFactor);
     }
 
     private void OnMouseDown()

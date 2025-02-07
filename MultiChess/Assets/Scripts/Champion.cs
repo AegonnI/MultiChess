@@ -7,6 +7,10 @@ public class Champion : Cell, IFigure<Champion>
 {
     public event Action<Champion, Action<Vector2, bool>> FigureClick;
 
+    private void Start()
+    {
+    }
+
     private void OnMouseDown()
     {
         if (FigureClick != null)
