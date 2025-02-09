@@ -55,6 +55,9 @@ public class ClassicChessMain : MonoBehaviour
     public static GameObject ChoosenFigure;
     public static bool figureClicked;
 
+    public static bool checkOfWhite;
+    public static bool checkOfBlack;
+
     void Start()
     {
         figureClicked = false;
@@ -66,6 +69,8 @@ public class ClassicChessMain : MonoBehaviour
         scale = _scale;
         SkinPath = "PixelClassic";
         scalingFactor = scale / 0.16f;
+        checkOfWhite = false;
+        checkOfBlack = false;
 
         cellOccupied = new GameObject[_fieldSize, _fieldSize];
         for (int i = 0; i < cellOccupied.GetLength(0); i++)

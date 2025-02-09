@@ -21,6 +21,19 @@ public class King : Cell, IFigure<King>
         if (FigureClick != null)
         {
             FigureClick(this, PossibleTurns);
+            //if (Check())
+            //{
+            //    if (isWhite)
+            //    {
+            //        ClassicChessMain.checkOfWhite = true;
+            //    }
+            //    else
+            //    {
+            //        ClassicChessMain.checkOfBlack = true;
+            //    }
+            //    Debug.Log(ClassicChessMain.checkOfWhite);
+            //    Debug.Log(ClassicChessMain.checkOfBlack);
+            //}
         }
     }
 
@@ -49,12 +62,69 @@ public class King : Cell, IFigure<King>
 
     private bool Check()
     {
-        //Vector2 pos = gameObject.transform.position;
+        Vector2 pos = gameObject.transform.position;
 
-        //for(float i = pos.x; i < ClassicChessMain.border; i++)
-        //{
-        //    ClassicChessMain.IsOpponentOnTheCell(x, y, isWhite);
-        //}
+        for (float x = pos.x + 1; x <= ClassicChessMain.border; x++)
+        {
+            if (ClassicChessMain.isCellOccupied(x, pos.y))
+            {
+                Debug.Log(x);
+                Debug.Log(pos.y);
+                Debug.Log(ClassicChessMain.GetAnOccupier(x, pos.y).name);
+                if (ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Queen>())
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        for (float x = pos.x - 1; x <= ClassicChessMain.border; x--)
+        {
+            if (ClassicChessMain.isCellOccupied(x, pos.y))
+            {
+                Debug.Log(x);
+                Debug.Log(pos.y);
+                Debug.Log(ClassicChessMain.GetAnOccupier(x, pos.y).name);
+                if (ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Queen>())
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        for (float y = pos.y + 1; y <= ClassicChessMain.border; y++)
+        {
+            if (ClassicChessMain.isCellOccupied(pos.x, y))
+            {
+                Debug.Log(pos.x);
+                Debug.Log(y);
+                Debug.Log(ClassicChessMain.GetAnOccupier(pos.x, y).name);
+                if (ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Queen>())
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        for (float y = pos.y - 1; y <= ClassicChessMain.border; y--)
+        {
+            if (ClassicChessMain.isCellOccupied(pos.x, y))
+            {
+                Debug.Log(pos.x);
+                Debug.Log(y);
+                Debug.Log(ClassicChessMain.GetAnOccupier(pos.x, y).name);
+                if (ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Queen>())
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+
         return false;
     }
 }
