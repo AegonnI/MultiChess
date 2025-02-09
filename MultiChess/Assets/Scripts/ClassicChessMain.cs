@@ -22,48 +22,30 @@ public class ClassicChessMain : MonoBehaviour
     public GameObject emptyCell;
     private static GameObject MoveCell;
 
+    public King king;
+    public Queen queen;
+    public Rook rook;
+    public Knight knight;
+    public Bishop bishop;
+    public Pawn pawn;
+
     //White
-    public Sprite whiteKingSprite;
-
     public Vector2[] whiteKingsCoords;
-    public King whiteKing;
     public Vector2[] whiteQueensCoords;
-    public Queen whiteQueen;
-
     public Vector2[] whiteRooksCoords;
-    public Rook whiteRook;
-
     public Vector2[] whiteKnightsCoords;
-    public Knight whiteKnight;
-
     public Vector2[] whiteBishopsCoords;
-    public Bishop whiteBishop;
-
     public Vector2[] whitePawnsCoords;
-    public Pawn whitePawn;
 
     //Black
-
     public Vector2[] blackKingsCoords;
-    public King blackKing;
     public Vector2[] blackQueensCoords;
-    public Queen blackQueen;
-
     public Vector2[] blackRooksCoords;
-    public Rook blackRook;
-
     public Vector2[] blackKnightsCoords;
-    public Knight blackKnight;
-
     public Vector2[] blackBishopsCoords;
-    public Bishop blackBishop;
-
     public Vector2[] blackPawnsCoords;
-    public Pawn blackPawn;
-    //
 
-    public Champion champion;
-    private List<GameObject> figures2;
+    //public Champion champion;
 
     private static List<GameObject> emptyCells;
     private static bool isWhiteMove;
@@ -72,8 +54,6 @@ public class ClassicChessMain : MonoBehaviour
 
     public static GameObject ChoosenFigure;
     public static bool figureClicked;
-
-
 
     void Start()
     {
@@ -98,23 +78,21 @@ public class ClassicChessMain : MonoBehaviour
 
         figures = new List<GameObject>();
 
-        //figures2 = new List<GameObject>();
-        figures.Add(Instantiate(champion.gameObject, new Vector3(1f / 2, -1f / 2, -1), Quaternion.identity));
-        figures.Last().GetComponent<Champion>().FigureClick += OnFigureClick;
+        king.isWhite = (queen.isWhite = rook.isWhite = (knight.isWhite = (bishop.isWhite = (pawn.isWhite = true))));
+        SpawnFigure(king, whiteKingsCoords);
+        SpawnFigure(queen, whiteQueensCoords);
+        SpawnFigure(rook, whiteRooksCoords);
+        SpawnFigure(knight, whiteKnightsCoords);
+        SpawnFigure(bishop, whiteBishopsCoords);
+        SpawnFigure(pawn, whitePawnsCoords);
 
-        SpawnFigure(whiteKing, whiteKingsCoords);
-        SpawnFigure(whiteQueen, whiteQueensCoords);
-        SpawnFigure(whiteRook, whiteRooksCoords);
-        SpawnFigure(whiteKnight, whiteKnightsCoords);
-        SpawnFigure(whiteBishop, whiteBishopsCoords);
-        SpawnFigure(whitePawn, whitePawnsCoords);
-
-        SpawnFigure(blackKing, blackKingsCoords);
-        SpawnFigure(blackQueen, blackQueensCoords);
-        SpawnFigure(blackRook, blackRooksCoords);
-        SpawnFigure(blackKnight, blackKnightsCoords);
-        SpawnFigure(blackBishop, blackBishopsCoords);
-        SpawnFigure(blackPawn, blackPawnsCoords);
+        king.isWhite = (queen.isWhite = rook.isWhite = (knight.isWhite = (bishop.isWhite = (pawn.isWhite = false))));
+        SpawnFigure(king, blackKingsCoords);
+        SpawnFigure(queen, blackQueensCoords);
+        SpawnFigure(rook, blackRooksCoords);
+        SpawnFigure(knight, blackKnightsCoords);
+        SpawnFigure(bishop, blackBishopsCoords);
+        SpawnFigure(pawn, blackPawnsCoords);
 
         foreach (GameObject figure in figures)
         {
@@ -188,8 +166,8 @@ public class ClassicChessMain : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (whiteKing != null)
-            whiteKing.GetComponent<King>().FigureClick -= OnFigureClick;
+        //if (whiteKing != null)
+        //    whiteKing.GetComponent<King>().FigureClick -= OnFigureClick;
     }
 
     private void OnFigureClick<T>(T clickedFigure, Action<Vector2, bool> action) where T : IFigure<T>, IGameObjectProvider

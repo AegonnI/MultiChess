@@ -231,7 +231,12 @@ MonoBehaviour:
   _scale: 1
   bgCell: {fileID: 675120949673373897, guid: 40f26f1ad19f70d449b1a0f7e76fe3e5, type: 3}
   emptyCell: {fileID: 1692165357936152233, guid: 8486f9300c72fc24f80e5e0344755fc3, type: 3}
-  whiteKingSprite: {fileID: -1742506286, guid: adf06935899511849bde664ee249d64d, type: 3}
+  king: {fileID: 5925991628527846350, guid: b073f725cd6aadc46b9eeea232e65c85, type: 3}
+  queen: {fileID: 615586037022763481, guid: ad7cb2265da1131468b0f502438d33f5, type: 3}
+  rook: {fileID: 366118889127101069, guid: 8124a87641957374e9be3e732aadc551, type: 3}
+  knight: {fileID: 2122156943518962986, guid: d264ab00e55806542b1c1fe01853784d, type: 3}
+  bishop: {fileID: 6210397712288245506, guid: b9a703e5b5ff2bb4d8649c785be84491, type: 3}
+  pawn: {fileID: 1471639104339401165, guid: 0531f1bf6b6dc974185efb1fb708fd29, type: 3}
   whiteKingsCoords:
   - {x: 5, y: 1}
   whiteKing: {fileID: 5925991628527846350, guid: 621a33bcb911d644e87f5f62d075fd3b, type: 3}
@@ -288,7 +293,6 @@ MonoBehaviour:
   - {x: 7, y: 7}
   - {x: 8, y: 7}
   blackPawn: {fileID: 1471639104339401165, guid: 63e38906967bce54ca07b04c640bf2b8, type: 3}
-  champion: {fileID: 7566812716235007213, guid: e097bb91a1f3aab46852bc3e93c39ba7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
