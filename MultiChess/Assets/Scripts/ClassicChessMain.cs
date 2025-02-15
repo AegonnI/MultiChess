@@ -50,7 +50,7 @@ public class ClassicChessMain : MonoBehaviour
     private static List<GameObject> emptyCells;
     private static bool isWhiteMove;
     private static GameObject[,] cellOccupied;
-    private List<GameObject> figures;
+    private static List<GameObject> figures;
 
     public static GameObject ChoosenFigure;
     public static bool figureClicked;
@@ -192,6 +192,7 @@ public class ClassicChessMain : MonoBehaviour
             {
                 KillFigure(clickedFigure.GetGameObject());
                 isWhiteMove = !isWhiteMove;
+                KingCheck();
             }
             DestroyEmptyCells();
         }
@@ -252,6 +253,42 @@ public class ClassicChessMain : MonoBehaviour
             clickedFigure.GetComponent<Pawn>().isFirstTurn = false;
         }
 
+        KingCheck();
+
         DestroyEmptyCells();
+    }
+
+    private static void KingCheck()
+    {
+        foreach(var figure in figures)
+        {
+            if (figure.GetComponent<King>()) 
+            { 
+                if (figure.GetComponent<King>().Check())
+                {
+                    if (figure.GetComponent<King>().isWhite)
+                    {
+                        checkOfWhite = true;
+                    }
+                    else
+                    {
+                        checkOfBlack = true;
+                    }
+                }
+                else
+                {
+                    if (figure.GetComponent<King>().isWhite)
+                    {
+                        checkOfWhite = false;
+                    }
+                    else
+                    {
+                        checkOfBlack = false;
+                    }
+                }
+            }
+        }
+        Debug.Log(checkOfWhite);
+        Debug.Log(checkOfBlack);
     }
 }

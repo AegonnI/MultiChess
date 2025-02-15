@@ -60,70 +60,46 @@ public class King : Cell, IFigure<King>
         }
     }
 
-    private bool Check()
+    public bool Check()
     {
         Vector2 pos = gameObject.transform.position;
 
-        for (float x = pos.x + 1; x <= ClassicChessMain.border; x++)
+        for (int i = -1; i <= 1; i++)
         {
-            if (ClassicChessMain.isCellOccupied(x, pos.y))
+            for (int j = -1; j <= 1; j++)
             {
-                Debug.Log(x);
-                Debug.Log(pos.y);
-                Debug.Log(ClassicChessMain.GetAnOccupier(x, pos.y).name);
-                if (ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Queen>())
+                if (i != j || (i == j && i != 0 && j != 0))
                 {
-                    return true;
+                    if (CheckTheThreat(pos.x + i, pos.y + j, i, j))
+                    {
+                        return true;
+                    }
                 }
-                break;
             }
         }
+        
+        
+        //return 
+        //    CheckTheThreat(pos.x + 1, pos.y, 1, 0) || CheckTheThreat(pos.x - 1, pos.y, -1, 0) || 
+        //    CheckTheThreat(pos.x, pos.y + 1, 0, 1) || CheckTheThreat(pos.x, pos.y - 1, 0, -1) ||
+        //    CheckTheThreat(pos.x + 1, pos.y + 1, 1, 1) || CheckTheThreat(pos.x + 1, pos.y - 1, 1, -1) ||
+        //    CheckTheThreat(pos.x - 1, pos.y - 1, -1, -1) || CheckTheThreat(pos.x - 1, pos.y + 1, -1, 1);
 
-        for (float x = pos.x - 1; x <= ClassicChessMain.border; x--)
+        bool CheckTheThreat(float startX, float startY, float deltaX, float deltaY)
         {
-            if (ClassicChessMain.isCellOccupied(x, pos.y))
+            for (float x = startX, y = startY; Math.Abs(x) <= ClassicChessMain.border && Math.Abs(y) <= ClassicChessMain.border; x += deltaX, y += deltaY)
             {
-                Debug.Log(x);
-                Debug.Log(pos.y);
-                Debug.Log(ClassicChessMain.GetAnOccupier(x, pos.y).name);
-                if (ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(x, pos.y).GetComponent<Queen>())
+                if (ClassicChessMain.isCellOccupied(x, y) && ClassicChessMain.GetAnOccupier(x, y).GetComponent<Cell>().isWhite != isWhite)
                 {
-                    return true;
+                    if (ClassicChessMain.GetAnOccupier(x, y).GetComponent<Bishop>() || ClassicChessMain.GetAnOccupier(x, y).GetComponent<Queen>())
+                    {
+                        return true;
+                    }
+                    break;
                 }
-                break;
             }
+            return false;
         }
-
-        for (float y = pos.y + 1; y <= ClassicChessMain.border; y++)
-        {
-            if (ClassicChessMain.isCellOccupied(pos.x, y))
-            {
-                Debug.Log(pos.x);
-                Debug.Log(y);
-                Debug.Log(ClassicChessMain.GetAnOccupier(pos.x, y).name);
-                if (ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Queen>())
-                {
-                    return true;
-                }
-                break;
-            }
-        }
-
-        for (float y = pos.y - 1; y <= ClassicChessMain.border; y--)
-        {
-            if (ClassicChessMain.isCellOccupied(pos.x, y))
-            {
-                Debug.Log(pos.x);
-                Debug.Log(y);
-                Debug.Log(ClassicChessMain.GetAnOccupier(pos.x, y).name);
-                if (ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Rook>() || ClassicChessMain.GetAnOccupier(pos.x, y).GetComponent<Queen>())
-                {
-                    return true;
-                }
-                break;
-            }
-        }
-
 
         return false;
     }
